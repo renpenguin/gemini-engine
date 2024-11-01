@@ -1,6 +1,4 @@
-//! A `GeminiEngine` (py) example, recreated in its rusty successor
-//! You can find the original here:
-//! <https://github.com/redpenguinyt/GeminiExamples/blob/master/test_multiple_movement.py>
+//! An example of [`fps_gameloop!`] in action
 
 use std::{thread, time::Duration};
 
