@@ -6,8 +6,9 @@ pub use visibility_toggle::VisibilityToggle;
 mod pixel_container;
 pub use pixel_container::PixelContainer;
 
-mod shader;
-pub use shader::CanShade;
+// TODO: decide whether or not to keep this
+// mod shader;
+// pub use shader::CanShade;
 
 mod collision_container;
-pub use collision_container::CollisionContainer;
+pub use collision_container::{CollisionContainer, CanCollide};

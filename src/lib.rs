@@ -9,6 +9,7 @@
 //! - [`elements3d`], which handles everything 3D-related. Objects that [`elements3d`] converts to a 2d object will then be printed to the screen by a [`View`](elements::View)
 
 pub mod ascii;
+pub mod containers;
 pub mod core;
 pub mod gameloop;
 pub mod primitives;
