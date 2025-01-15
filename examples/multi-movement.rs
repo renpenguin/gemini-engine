@@ -43,11 +43,11 @@ fn main() {
 
             if blocks
                 .iter()
-                .all(|b| b.pos.x % isize::try_from(view.width).expect("Wrapped usize") == 0)
+                .all(|b| b.pos.x % view.width as i64 == 0)
             {
                 thread::sleep(Duration::from_secs(2));
             };
         },
-        200.0
+        60.0
     );
 }
