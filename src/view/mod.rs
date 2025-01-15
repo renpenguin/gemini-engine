@@ -5,12 +5,10 @@ use std::{
 };
 use crate::core::{CanDraw, Canvas, ColChar, Vec2D};
 
-mod pixel;
 mod scale_to_fit;
 mod term_utils;
 mod wrapping;
 
-pub use pixel::Pixel;
 pub use scale_to_fit::ScaleFitView;
 pub use wrapping::WrappingMode;
 

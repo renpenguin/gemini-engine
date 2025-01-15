@@ -6,11 +6,14 @@ pub use helpers::{triangulate, interpolate, interpolate_floating};
 mod line;
 pub use line::Line;
 
-mod triangle;
-pub use triangle::Triangle;
+mod pixel;
+pub use pixel::Pixel;
 
 mod polygon;
 pub use polygon::Polygon;
 
 mod rect;
 pub use rect::Rect;
+
+mod triangle;
+pub use triangle::Triangle;
