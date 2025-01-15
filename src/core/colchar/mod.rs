@@ -53,47 +53,37 @@ impl ColChar {
 
     /// Return a `ColChar` with the same `modifier` and new `text_char`
     #[must_use]
-    pub const fn with_char(self, text_char: char) -> Self {
-        Self {
-            text_char,
-            modifier: self.modifier,
-        }
+    pub const fn with_char(mut self, text_char: char) -> Self {
+        self.text_char = text_char;
+        self
     }
 
     /// Return a `ColChar` with the same `text_char` and new `modifier`
     #[must_use]
-    pub const fn with_mod(self, modifier: Modifier) -> Self {
-        Self {
-            text_char: self.text_char,
-            modifier,
-        }
-    }
-
-    /// Return a `ColChar` with the same `text_char` and new `modifier` of the `Modifier::Colour` enum variant from RGB values
-    #[must_use]
-    pub const fn with_rgb(self, r: u8, g: u8, b: u8) -> Self {
-        Self {
-            text_char: self.text_char,
-            modifier: Modifier::from_rgb(r, g, b),
-        }
-    }
-
-    /// Return a `ColChar` with the same `text_char` and new `modifier` of the `Modifier::Colour` enum variant from HSV values
-    #[must_use]
-    pub fn with_hsv(self, h: u8, s: u8, v: u8) -> Self {
-        Self {
-            text_char: self.text_char,
-            modifier: Modifier::from_hsv(h, s, v),
-        }
+    pub const fn with_mod(mut self, modifier: Modifier) -> Self {
+        self.modifier = modifier;
+        self
     }
 
     /// Return a `ColChar` with the same `text_char` and new `modifier` of the `Modifier::Colour` enum variant from an HSV value
     #[must_use]
-    pub const fn with_colour(self, colour: Colour) -> Self {
-        Self {
-            text_char: self.text_char,
-            modifier: Modifier::Colour(colour),
-        }
+    pub const fn with_colour(mut self, colour: Colour) -> Self {
+        self.modifier = Modifier::Colour(colour);
+        self
+    }
+
+    /// Return a `ColChar` with the same `text_char` and new `modifier` of the `Modifier::Colour` enum variant from RGB values
+    #[must_use]
+    pub const fn with_rgb(mut self, r: u8, g: u8, b: u8) -> Self {
+        self.modifier = Modifier::from_rgb(r, g, b);
+        self
+    }
+
+    /// Return a `ColChar` with the same `text_char` and new `modifier` of the `Modifier::Colour` enum variant from HSV values
+    #[must_use]
+    pub fn with_hsv(mut self, h: u8, s: u8, v: u8) -> Self {
+        self.modifier = Modifier::from_hsv(h, s, v);
+        self
     }
 
     /// Return the displayed `ColChar`, omitting the `Modifier`s where necessary

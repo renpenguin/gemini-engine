@@ -76,7 +76,7 @@ pub fn triangulate(vertices: &[Vec2D]) -> Vec<[Vec2D; 3]> {
 	triangles
 }
 
-/// Draw a pseudo-line between the independent and dependent positions. Returns rounded values as `isize`s. If you don't want the values rounded, use [`Triangle::interpolate_floating()`]
+/// Draw a pseudo-line between the independent and dependent positions. Returns rounded values as `i64`s. If you don't want the values rounded, use [`Triangle::interpolate_floating()`]
 #[must_use]
 pub fn interpolate(i0: i64, d0: i64, i1: i64, d1: i64) -> Vec<i64> {
 	interpolate_floating(i0, d0 as f64, i1, d1 as f64)
