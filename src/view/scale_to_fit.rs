@@ -1,5 +1,6 @@
+use crate::{core::Canvas, view::term_utils};
+
 use super::{ColChar, Vec2D, View};
-use crate::utils;
 
 /// A wrapper around a [`View`] which auto resizes to fit the terminal window
 ///
@@ -9,7 +10,7 @@ pub struct ScaleFitView {
     /// The [`View`] that this struct wraps around
     pub view: View,
     /// How many rows to leave clear below the rendered view. You might want to set this if you have more than one line of text after rendered text
-    pub empty_row_count: isize,
+    pub empty_row_count: i64,
 }
 
 impl Default for ScaleFitView {
@@ -32,7 +33,7 @@ impl ScaleFitView {
 
     /// Returns the `ScaleFitView` with the updated [`empty_row_count`](ScaleFitView::empty_row_count)
     #[must_use]
-    pub const fn with_empty_row_count(mut self, empty_row_count: isize) -> Self {
+    pub const fn with_empty_row_count(mut self, empty_row_count: i64) -> Self {
         self.empty_row_count = empty_row_count;
         self
     }
@@ -44,7 +45,7 @@ impl ScaleFitView {
     #[must_use]
     pub fn intended_size(&self) -> Vec2D {
         let mut term_size =
-            utils::get_terminal_size_as_vec2d().expect("Failed to get terminal size");
+            term_utils::get_terminal_size_as_vec2d().expect("Failed to get terminal size");
         term_size.y -= self.empty_row_count + 1;
 
         assert_ne!(term_size.x, 0, "Terminal width detected to be 0");
@@ -60,5 +61,11 @@ impl ScaleFitView {
         self.view.height = term_size.y as usize;
 
         self.view.clear();
+    }
+}
+
+impl Canvas for ScaleFitView {
+    fn plot(&mut self, pos: Vec2D, c: ColChar) {
+        self.view.plot(pos, c);
     }
 }

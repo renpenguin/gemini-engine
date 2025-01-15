@@ -1,10 +1,9 @@
 //! A visual recreation of donut-c in gemini
 use gemini_engine::{
-    elements::{
-        view::{ColChar, Wrapping},
-        View,
-    },
-    elements3d::{view3d::Light, DisplayMode, Mesh3D, Transform3D, Vec3D, Viewport},
+    view::{View, WrappingMode},
+    core::ColChar,
+    view3d::{Light, DisplayMode, Transform3D, Vec3D, Viewport},
+    mesh3d::Mesh3D,
     fps_gameloop,
 };
 

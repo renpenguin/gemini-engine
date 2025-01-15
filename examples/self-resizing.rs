@@ -1,10 +1,10 @@
 //! An example of a self-resizing view using `ScaleFitView`
 use std::{thread::sleep, time::Duration};
 
-use gemini_engine::elements::{
-    ascii::{TextAlign, TextAlign2D},
-    view::{ColChar, Modifier, ScaleFitView, Wrapping},
-    Sprite, Text, Vec2D,
+use gemini_engine::{
+    ascii::{TextAlign, TextAlign2D, Sprite, Text},
+    core::{ColChar, Modifier, Vec2D},
+    view::ScaleFitView,
 };
 
 const TEXTURE: &str = "
@@ -29,8 +29,8 @@ fn main() {
         sprite.pos.y -= 5;
 
         scale_view.update();
-        scale_view.view.blit(&text, Wrapping::Wrap);
-        scale_view.view.blit(&sprite, Wrapping::Wrap);
+        scale_view.view.draw(&text);
+        scale_view.view.draw(&sprite);
         let _ = scale_view.view.display_render();
 
         sleep(Duration::from_millis(10));

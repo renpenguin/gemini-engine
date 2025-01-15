@@ -1,6 +1,8 @@
 use std::fmt::{self, Debug, Display};
+
 mod colour;
 mod modifier;
+
 pub use colour::Colour;
 pub use modifier::Modifier;
 

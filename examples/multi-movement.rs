@@ -3,18 +3,17 @@
 use std::{thread, time::Duration};
 
 use gemini_engine::{
-    elements::{
-        view::{ColChar, View, Wrapping},
-        Rect, Vec2D,
-    },
+    core::{ColChar, Vec2D},
     fps_gameloop,
+    primitives::Rect,
+    view::{View, WrappingMode},
 };
 
 const BLOCK_SIZE: Vec2D = Vec2D::new(4, 2);
 const FILL_CHAR: ColChar = ColChar::SOLID;
 
 fn main() {
-    let mut view = View::new(50, 12, ColChar::BACKGROUND);
+    let mut view = View::new(50, 12, ColChar::BACKGROUND).with_wrapping_mode(WrappingMode::Wrap);
 
     let mut blocks = vec![
         Rect::new(Vec2D::new(0, 0), BLOCK_SIZE, FILL_CHAR),
@@ -38,7 +37,7 @@ fn main() {
         {
             view.clear();
             for block in &blocks {
-                view.blit(block, Wrapping::Wrap);
+                view.draw(block);
             }
             let _ = view.display_render();
 

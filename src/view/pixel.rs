@@ -1,14 +1,4 @@
-use super::ViewElement;
-
-pub mod colchar;
-pub mod vec2d;
-
-use colchar::ColChar;
-use vec2d::Vec2D;
-
-/// Old name for [`Pixel`], this is now deprecated
-#[deprecated = "Renamed to Pixel, please use that instead"]
-pub type Point = Pixel;
+use crate::core::{CanDraw, ColChar, Vec2D};
 
 /// The `Pixel` holds a single [`Vec2D`] (the coordinates at which it is printed when blit to a [`View`](super::View)) and a [`ColChar`]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -27,17 +17,18 @@ impl Pixel {
     }
 }
 
-impl From<(Vec2D, ColChar)> for Pixel {
-    fn from(value: (Vec2D, ColChar)) -> Self {
-        Self {
-            pos: value.0,
-            fill_char: value.1,
-        }
-    }
-}
+// TODO: figure out if we need this?
+// impl From<(Vec2D, ColChar)> for Pixel {
+//     fn from(value: (Vec2D, ColChar)) -> Self {
+//         Self {
+//             pos: value.0,
+//             fill_char: value.1,
+//         }
+//     }
+// }
 
-impl ViewElement for Pixel {
-    fn active_pixels(&self) -> Vec<Pixel> {
-        vec![*self]
+impl CanDraw for Pixel {
+    fn draw_to(&self, canvas: &mut impl crate::core::Canvas) {
+        canvas.plot(self.pos, self.fill_char);
     }
 }

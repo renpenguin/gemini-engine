@@ -1,10 +1,14 @@
 //! An example of a more complex scene in Gemini
-use gemini_engine::elements::{
-    view::{ColChar, Modifier, Vec2D, Wrapping},
-    Line, Pixel, Rect, Sprite, View,
+use std::time::Duration;
+
+use gemini_engine::{
+    ascii::Sprite,
+    core::{ColChar, Modifier, Vec2D},
+    primitives::{Line, Rect},
+    view::{Pixel, View, WrappingMode},
+    fps_gameloop
 };
-use gemini_engine::fps_gameloop;
-use gemini_engine::gameloop::Duration;
+
 
 const FPS: f32 = 20.0;
 const FILL_CHAR: ColChar = ColChar::SOLID;
@@ -12,7 +16,6 @@ const BACKGROUND_CHAR: ColChar = ColChar::EMPTY;
 
 fn main() {
     let mut view = View::new(60, 10, BACKGROUND_CHAR);
-    view.coord_numbers_in_render = true;
 
     let mut pixel = Pixel::new(Vec2D::from((5u8, 9u8)), FILL_CHAR);
 
@@ -58,10 +61,12 @@ fn main() {
             view.clear();
 
             let now = Instant::now();
-            view.blit(&pixel, Wrapping::Panic);
-            view.blit(&line, Wrapping::Panic);
-            view.blit(&rect, Wrapping::Panic);
-            view.blit(&sprite, Wrapping::Wrap);
+            view.wrapping_mode = WrappingMode::Panic;
+            view.draw(&pixel);
+            view.draw(&line);
+            view.draw(&rect);
+            view.wrapping_mode = WrappingMode::Wrap;
+            view.draw(&sprite);
             blit_elapsed = now.elapsed();
 
             let now = Instant::now();

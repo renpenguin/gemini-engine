@@ -1,32 +1,24 @@
-use crate::elements::Vec2D;
+use crate::core::Vec2D;
 use std::{fmt, sync::OnceLock};
 use terminal_size::terminal_size;
-
-#[macro_use]
-pub mod macros;
 
 static TERMINAL_PREPARED: OnceLock<bool> = OnceLock::new();
 
 /// Returns the size of the terminal as a `Vec2D`, using [`terminal_size::terminal_size()`]
-///
-/// # Panics
-/// This function will panic if your target cannot safely convert an i16 to an isize
 #[must_use]
 pub fn get_terminal_size_as_vec2d() -> Option<Vec2D> {
     let (width, height) = terminal_size()?;
-    Some(Vec2D::new(
-        isize::try_from(width.0).expect("isize cannot fit u16"),
-        isize::try_from(height.0).expect("isize cannot fit u16"),
-    ))
+    Some(Vec2D::new(i64::from(width.0), i64::from(height.0)))
 }
 
 /// Block the process until the console window is resized to
 pub fn block_until_resized(view_size: Vec2D) {
-    if let Some(size) = get_terminal_size_as_vec2d() {
-        if size < view_size {
+    if let Some(term_size) = get_terminal_size_as_vec2d() {
+        if term_size.cmplt(view_size).any() {
             println!("Please resize your console window to fit the render\r");
             loop {
-                if get_terminal_size_as_vec2d().unwrap_or_else(|| unreachable!()) > view_size {
+				let term_size = get_terminal_size_as_vec2d().unwrap_or_else(|| unreachable!());
+                if term_size.cmpge(view_size).all() {
                     break;
                 }
             }

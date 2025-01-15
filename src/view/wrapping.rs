@@ -2,7 +2,7 @@ use super::Vec2D;
 
 /// Wrapping is used to determine how you want to handle out-of-bounds pixels during plotting pixels to the screen. Here's how each possible value functions:
 #[derive(Debug, Clone, Copy)]
-pub enum Wrapping {
+pub enum WrappingMode {
     /// `Wrapping::Wrap` wraps any out of bounds pixels around to the other side. This is useful if you have an object that travels the entirety of the screen and appears on the other side when it reaches the end.
     Wrap,
     /// `Wrapping::Ignore` simply skips all out-of-bounds pixels. This is useful if you might have an object clipping through the edge of the screen but don't want it to wrap to the other side like [`Wrapping::Wrap`] or panic and end the process like [`Wrapping::Panic`]
@@ -11,14 +11,14 @@ pub enum Wrapping {
     Panic,
 }
 
-impl Wrapping {
-    /// Handle the position based on the given bounds and the Wrapping variation (See the [Wrapping] documentation for more info)
+impl WrappingMode {
+    /// Handle the position based on the given bounds and the `WrappingMode` variation (See the [`WrappingMode`] documentation for more info)
     ///
     /// # Panics
-    /// `Wrapping::Panic` will panic if the position is out of bounds
+    /// `WrappingMode::Panic` will panic if the position is out of bounds
     #[must_use]
     pub fn handle_bounds(&self, pos: Vec2D, bounds: Vec2D) -> Option<Vec2D> {
-        let in_bounds_pos = pos % bounds;
+        let in_bounds_pos = pos.rem_euclid(bounds);
 
         match self {
             Self::Wrap => Some(in_bounds_pos),
