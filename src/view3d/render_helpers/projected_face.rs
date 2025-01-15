@@ -1,6 +1,6 @@
 use crate::{
-    elements::{view::ColChar, Vec2D},
-    elements3d::Vec3D,
+    core::{ColChar, Vec2D},
+    mesh3d::Vec3D,
 };
 
 pub struct ProjectedFace {
@@ -40,7 +40,7 @@ impl ProjectedFace {
         if self.original_vertices.len() >= 3 {
             let v0 = self.original_vertices[0] - self.original_vertices[2];
             let v1 = self.original_vertices[1] - self.original_vertices[2];
-            Some(v0.cross(v1).normal())
+            Some(v0.cross(v1).normalize())
         } else {
             None
         }

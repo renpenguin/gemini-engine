@@ -1,5 +1,8 @@
-use super::{Face, Transform3D, Vec3D};
+use crate::view3d::Face;
 mod mesh3d_presets;
+
+pub type Vec3D = glam::DVec3;
+pub type Transform3D = glam::DMat4;
 
 /// The struct for a `Mesh3D` object, containing a position, rotation, collection of vertices and collection of [`Face`]s with indices to the vertex collection.
 #[derive(Debug, Clone)]
@@ -15,21 +18,18 @@ pub struct Mesh3D {
 impl Mesh3D {
     /// Create a `Mesh3D` with a default `Transform3D`
     #[must_use]
-    pub const fn new(transform: Transform3D, vertices: Vec<Vec3D>, faces: Vec<Face>) -> Self {
+    pub const fn new(vertices: Vec<Vec3D>, faces: Vec<Face>) -> Self {
         Self {
-            transform,
+            transform: Transform3D::IDENTITY,
             vertices,
             faces,
         }
     }
 
-    /// Create a `Mesh3D` with a default `Transform3D`
+    /// Create a `Mesh3D` with `Transform3D` set to an identity matrix
     #[must_use]
-    pub const fn new_at_origin(vertices: Vec<Vec3D>, faces: Vec<Face>) -> Self {
-        Self {
-            transform: Transform3D::DEFAULT,
-            vertices,
-            faces,
-        }
+    pub const fn with_transform(mut self, transform: Transform3D) -> Self {
+        self.transform = transform;
+        self
     }
 }

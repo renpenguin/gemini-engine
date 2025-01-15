@@ -15,5 +15,7 @@ pub mod gameloop;
 pub mod primitives;
 pub mod view;
 
-// #[cfg(feature = "3D")]
-// pub mod elements3d;
+#[cfg(feature = "3D")]
+pub mod mesh3d;
+#[cfg(feature = "3D")]
+pub mod view3d;

@@ -1,4 +1,4 @@
-use crate::elements3d::Vec3D;
+use crate::mesh3d::Vec3D;
 
 /// Characters for brightness. The first character is the darkest and the rightmost character is the brightest
 pub const BRIGHTNESS_CHARS: &str = ".,-~:;=!*(%#$@";
@@ -62,7 +62,7 @@ impl Light {
     fn calculate_intensity_for_direction(&self, normal: Vec3D, direction: Vec3D) -> f64 {
         let n_dot_l = normal.dot(direction);
         if n_dot_l > 0.0 {
-            self.intensity * n_dot_l / (normal.magnitude() * direction.magnitude())
+            self.intensity * n_dot_l / (normal.length() * direction.length())
         } else {
             0.0
         }

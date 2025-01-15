@@ -1,4 +1,4 @@
-use crate::{elements::Vec2D, elements3d::Vec3D};
+use crate::{core::Vec2D, mesh3d::Vec3D};
 
 #[derive(Debug, Clone, Copy)]
 pub struct ProjectedVertex {
@@ -15,6 +15,6 @@ impl ProjectedVertex {
     }
 
     pub fn z_index(&self) -> f64 {
-        self.original.magnitude()
+        self.original.length()
     }
 }

@@ -1,20 +1,20 @@
 use super::Triangle;
 use crate::core::{CanDraw, ColChar, Vec2D};
 
-/// The `Polygon` takes a vec of [`Vec2D`]s and returns a polygon with those vertices when blit to a [`View`](super::super::View)
+/// A `Polygon` draws a polygon with the chosen vertices by triangulating them
 pub struct Polygon {
-    /// The vertices that make up the polygon
+    /// The vertices that make up the `Polygon`
     pub vertices: Vec<Vec2D>,
-    /// The [`ColChar`] used to fill the polygon
+    /// The [`ColChar`] used to fill the `Polygon`
     pub fill_char: ColChar,
 }
 
 impl Polygon {
-    /// Create a new polygon
+    /// Create a new `Polygon`
     #[must_use]
-    pub const fn new(vertices: Vec<Vec2D>, fill_char: ColChar) -> Self {
+    pub fn new(vertices: &[Vec2D], fill_char: ColChar) -> Self {
         Self {
-            vertices,
+            vertices: vertices.to_vec(),
             fill_char,
         }
     }

@@ -1,17 +1,18 @@
 //! This file contains the presets available when spawning a [`Mesh3D`]
 
 use std::f64::consts::PI;
-
 use crate::{
-    elements::view::{ColChar, Modifier},
-    elements3d::{Face, Mesh3D, Transform3D, Vec3D},
+    core::{ColChar, Modifier},
+    view3d::Face,
 };
+
+use super::{Mesh3D, Vec3D, Transform3D};
 
 impl Mesh3D {
     /// The `gemini_engine` equivalent of Blender's default cube. Has side lengths of 2
     #[must_use]
     pub fn default_cube() -> Self {
-        Self::new_at_origin(
+        Self::new(
             vec![
                 Vec3D::new(1.0, 1.0, -1.0),
                 Vec3D::new(1.0, 1.0, 1.0),
@@ -46,7 +47,7 @@ impl Mesh3D {
 
         for outer_i in 0..outer_segments {
             let outer_angle = (outer_i as f64 / outer_segments as f64) * 2.0 * PI;
-            let outer_transform = Transform3D::new_r(Vec3D::new(0.0, outer_angle, 0.0));
+            let outer_transform = Transform3D::from_rotation_y(-outer_angle);
             let outer_point = Vec3D::new(
                 outer_angle.cos() * outer_radius,
                 0.0,
@@ -60,7 +61,7 @@ impl Mesh3D {
                     inner_angle.sin() * inner_radius,
                     0.0,
                 );
-                vertices.push(outer_point + outer_transform.rotate(inner_point));
+                vertices.push(outer_point + outer_transform.transform_vector3(inner_point));
 
                 let inc_outer_i = (outer_i + 1) % outer_segments;
                 let inc_inner_i = (inner_i + 1) % inner_segments;
@@ -76,7 +77,7 @@ impl Mesh3D {
             }
         }
 
-        Self::new_at_origin(vertices, faces)
+        Self::new(vertices, faces)
     }
 
     /// A gimbal to help you orient in `gemini_engine`'s 3D space. The orientation is as follows (from the default [`Viewport`](super::super::Viewport))
@@ -88,7 +89,7 @@ impl Mesh3D {
     /// This Mesh does not render in `DisplayMode::SOLID` (see [`DisplayMode`](super::super::DisplayMode) documentation)
     #[must_use]
     pub fn gimbal() -> Self {
-        Self::new_at_origin(
+        Self::new(
             vec![
                 Vec3D::ZERO,
                 Vec3D::new(1.0, 0.0, 0.0),
