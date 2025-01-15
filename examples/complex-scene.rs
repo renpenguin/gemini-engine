@@ -1,14 +1,12 @@
 //! An example of a more complex scene in Gemini
-use std::time::Duration;
-
 use gemini_engine::{
     ascii::Sprite,
     core::{ColChar, Modifier, Vec2D},
-    primitives::{Line, Rect},
-    view::{Pixel, View, WrappingMode},
-    fps_gameloop
+    fps_gameloop,
+    primitives::{Line, Pixel, Rect},
+    view::{View, WrappingMode},
 };
-
+use std::time::Duration;
 
 const FPS: f32 = 20.0;
 const FILL_CHAR: ColChar = ColChar::SOLID;
@@ -17,7 +15,7 @@ const BACKGROUND_CHAR: ColChar = ColChar::EMPTY;
 fn main() {
     let mut view = View::new(60, 10, BACKGROUND_CHAR);
 
-    let mut pixel = Pixel::new(Vec2D::from((5u8, 9u8)), FILL_CHAR);
+    let mut pixel = Pixel::new(Vec2D::new(5, 9), FILL_CHAR);
 
     let mut line = Line::new(Vec2D::new(2, 8), Vec2D::new(28, 7), FILL_CHAR);
     let mut line1_direction = -1;

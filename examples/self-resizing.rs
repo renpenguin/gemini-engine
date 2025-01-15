@@ -1,11 +1,10 @@
 //! An example of a self-resizing view using `ScaleFitView`
-use std::{thread::sleep, time::Duration};
-
 use gemini_engine::{
-    ascii::{TextAlign, TextAlign2D, Sprite, Text},
+    ascii::{Sprite, Text, TextAlign, TextAlign2D},
     core::{ColChar, Modifier, Vec2D},
     view::ScaleFitView,
 };
+use std::{thread::sleep, time::Duration};
 
 const TEXTURE: &str = "
 .-----.

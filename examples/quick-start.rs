@@ -1,8 +1,9 @@
 //! The quick start example
-use gemini_engine::gameloop;
 use gemini_engine::{
     core::{ColChar, Vec2D},
-    view::{Pixel, View, WrappingMode},
+    gameloop,
+    primitives::Pixel,
+    view::{View, WrappingMode},
 };
 
 const FPS: f32 = 30.0;

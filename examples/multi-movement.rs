@@ -41,10 +41,7 @@ fn main() {
             }
             let _ = view.display_render();
 
-            if blocks
-                .iter()
-                .all(|b| b.pos.x % view.width as i64 == 0)
-            {
+            if blocks.iter().all(|b| b.pos.x % view.width as i64 == 0) {
                 thread::sleep(Duration::from_secs(2));
             };
         },

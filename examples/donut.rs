@@ -1,10 +1,10 @@
 //! A visual recreation of donut-c in gemini
 use gemini_engine::{
-    view::{View, WrappingMode},
     core::ColChar,
-    view3d::{Light, DisplayMode, Transform3D, Vec3D, Viewport},
-    mesh3d::Mesh3D,
     fps_gameloop,
+    mesh3d::Mesh3D,
+    view::View,
+    view3d::{DisplayMode, Light, Transform3D, Vec3D, Viewport},
 };
 
 const FPS: f32 = 60.0;
@@ -32,14 +32,13 @@ fn main() {
         },
         {
             view.clear();
-            view.blit(
+            view.draw(
                 &viewport.render(
                     vec![&donut],
                     DisplayMode::Illuminated {
                         lights: lights.clone(),
                     },
                 ),
-                Wrapping::Ignore,
             );
             let _ = view.display_render();
         },

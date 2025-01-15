@@ -1,10 +1,11 @@
 //! `quick-start.rs` recreated using [`gameloop::MainLoopRoot`](gemini_engine::gameloop::MainLoopRoot)
 
+use gemini_engine::gameloop::MainLoopRoot;
 use gemini_engine::{
     core::{ColChar, Vec2D},
-    view::{Pixel, View, WrappingMode},
+    primitives::Pixel,
+    view::{View, WrappingMode},
 };
-use gemini_engine::gameloop::MainLoopRoot;
 
 const FPS: f32 = 30.0;
 
@@ -16,8 +17,7 @@ struct Game {
 impl Game {
     fn new() -> Self {
         Self {
-            view: View::new(40, 8, ColChar::BACKGROUND)
-                .with_wrapping_mode(WrappingMode::Wrap),
+            view: View::new(40, 8, ColChar::BACKGROUND).with_wrapping_mode(WrappingMode::Wrap),
             pixel: Pixel::new(Vec2D { x: 10, y: 5 }, ColChar::SOLID),
         }
     }
