@@ -1,4 +1,4 @@
-use crate::elements::Vec2D;
+use crate::core::Vec2D;
 
 /// An enum to set the alignment of a Text element's content
 #[derive(Debug, Clone, Copy)]
@@ -14,7 +14,7 @@ pub enum TextAlign {
 impl TextAlign {
     /// Align the given 1-dimentional coordinate as dictated by the `TextAlign` enum variation
     #[must_use]
-    pub const fn apply_to(&self, pos: isize, text_length: isize) -> isize {
+    pub const fn apply_to(&self, pos: i64, text_length: i64) -> i64 {
         match self {
             Self::Begin => pos,
             Self::Centered => pos - text_length / 2,

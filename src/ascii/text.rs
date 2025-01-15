@@ -1,7 +1,4 @@
-use crate::elements::{
-    view::{ColChar, Modifier, ViewElement},
-    Pixel, Vec2D,
-};
+use crate::core::{CanDraw, ColChar, Modifier, Vec2D};
 
 use super::TextAlign;
 
@@ -41,47 +38,24 @@ impl Text {
 
     /// Return the `Text` with the modified align property
     #[must_use]
-    pub const fn with_align(self, align: TextAlign) -> Self {
-        let mut tmp = self;
-        tmp.align = align;
-        tmp
-    }
-
-    /// Return a vector of Pixels to display the given content
-    #[must_use]
-    pub fn draw(pos: Vec2D, content: &str, modifier: Modifier) -> Vec<Pixel> {
-        let mut pixels = vec![];
-        for (x, text_char) in (0isize..).zip(content.chars()) {
-            if text_char != ' ' {
-                pixels.push(Pixel::new(
-                    pos + Vec2D::new(x, 0),
-                    ColChar {
-                        text_char,
-                        modifier,
-                    },
-                ));
-            }
-        }
-
-        pixels
-    }
-
-    /// Return a vector of Pixels to display the given content, aligning the content to the position as directed by the `align` attribute
-    #[must_use]
-    pub fn draw_with_align(
-        pos: Vec2D,
-        content: &str,
-        align: TextAlign,
-        modifier: Modifier,
-    ) -> Vec<Pixel> {
-        let pos = Vec2D::new(align.apply_to(pos.x, content.len() as isize), pos.y);
-
-        Self::draw(pos, content, modifier)
+    pub const fn with_align(mut self, align: TextAlign) -> Self {
+        self.align = align;
+        self
     }
 }
 
-impl ViewElement for Text {
-    fn active_pixels(&self) -> Vec<Pixel> {
-        Self::draw_with_align(self.pos, &self.content, self.align, self.modifier)
+impl CanDraw for Text {
+    fn draw_to(&self, canvas: &mut impl crate::core::Canvas) {
+        let mut pos = self.pos;
+        pos.x = self.align.apply_to(pos.x, self.content.len() as i64);
+
+        for (x, text_char) in (0..).zip(self.content.chars()) {
+            if text_char != ' ' {
+                canvas.plot(
+                    pos + Vec2D::new(x, 0),
+                    ColChar::new(text_char, self.modifier),
+                );
+            }
+        }
     }
 }
