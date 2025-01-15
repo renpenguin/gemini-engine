@@ -1,3 +1,5 @@
+//! This module contains the core items that define the structure of the gemini renderer
+
 mod colchar;
 pub use colchar::{ColChar, Colour, Modifier};
 

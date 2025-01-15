@@ -9,8 +9,9 @@
 //! - [`elements3d`], which handles everything 3D-related. Objects that [`elements3d`] converts to a 2d object will then be printed to the screen by a [`View`](elements::View)
 
 pub mod core;
-// #[cfg(feature = "3D")]
-// pub mod elements3d;
 pub mod gameloop;
 pub mod primitives;
 pub mod view;
+
+// #[cfg(feature = "3D")]
+// pub mod elements3d;
