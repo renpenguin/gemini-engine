@@ -1,5 +1,8 @@
 //! This module contains basic geometry structs that implement [`ViewElement`](super::view::ViewElement), such as [`Line`] or [`Triangle`]
 
+mod helpers;
+pub use helpers::{triangulate, interpolate, interpolate_floating};
+
 mod line;
 pub use line::Line;
 

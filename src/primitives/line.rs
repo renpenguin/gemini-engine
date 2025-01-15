@@ -1,4 +1,4 @@
-use crate::elements::view::{utils, ColChar, Pixel, Vec2D, ViewElement};
+use crate::core::{ColChar, CanDraw, Vec2D};
 
 /// The `Line` takes two [`Vec2D`]s and returns a line between those vertices when blit to a [`View`](super::super::View)
 pub struct Line {
@@ -20,15 +20,12 @@ impl Line {
             fill_char,
         }
     }
+}
 
-    /// Draw a line using Bresenham's line algorithm. Returns a list of the pixels to print to
-    #[must_use]
-    pub fn draw(pos0: Vec2D, pos1: Vec2D) -> Vec<Vec2D> {
-        // Use Bresenham's line algorithm to generate active pixels at rendertime
-        let mut points = Vec::new();
-
-        let (mut x, mut y) = pos0.as_tuple();
-        let (x1, y1) = pos1.as_tuple();
+impl CanDraw for Line {
+    fn draw_to(&self, canvas: &mut impl crate::core::Canvas) {
+        let (mut x, mut y) = self.pos0.into();
+        let (x1, y1) = self.pos1.into();
 
         let dx = (x1 - x).abs();
         let sx = if x < x1 { 1 } else { -1 };
@@ -37,8 +34,7 @@ impl Line {
         let mut error = dx + dy;
 
         loop {
-            let point = Vec2D::new(x, y);
-            points.push(point);
+            canvas.plot(Vec2D::new(x, y), self.fill_char);
             let e2 = error * 2;
             if e2 >= dy {
                 if x == x1 {
@@ -55,17 +51,5 @@ impl Line {
                 y += sy;
             };
         }
-
-        points
-    }
-}
-
-impl ViewElement for Line {
-    fn active_pixels(&self) -> Vec<Pixel> {
-        utils::points_to_pixels(&self.active_points(), self.fill_char)
-    }
-
-    fn active_points(&self) -> Vec<Vec2D> {
-        Self::draw(self.pos0, self.pos1)
     }
 }

@@ -12,4 +12,5 @@ pub mod core;
 // #[cfg(feature = "3D")]
 // pub mod elements3d;
 pub mod gameloop;
+pub mod primitives;
 pub mod view;
