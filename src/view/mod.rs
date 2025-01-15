@@ -1,9 +1,12 @@
 //! This module is home to the [`View`] struct, which handles the printing of pixels to an ANSI standard text output
+use crate::{
+    containers::PixelContainer,
+    core::{CanDraw, Canvas, ColChar, Vec2D},
+};
 use std::{
     fmt::{self, Display, Formatter},
     io::{self, Write},
 };
-use crate::core::{CanDraw, Canvas, ColChar, Vec2D};
 
 mod scale_to_fit;
 mod term_utils;
@@ -88,13 +91,19 @@ impl View {
     }
 
     /// Draw a struct implementing [`CanDraw`] to the `Canvas`
+    #[inline]
     pub fn draw(&mut self, element: &impl CanDraw) {
         element.draw_to(self);
     }
 
     /// Blit a struct implementing [`CanDraw`] to the `View` with a doubled width. Drawing a `Pixel` at `Vec2D(5,3)`, for example, will result in pixels at at `Vec2D(10,3)` and `Vec2D(11,3)` being plotted to. Useful when you want to work with more square pixels, as single text characters are much taller than they are wide
-    pub fn draw_double_width(&mut self, _element: &impl CanDraw) {
-        todo!()
+    pub fn draw_double_width(&mut self, element: &impl CanDraw) {
+        for mut pixel in PixelContainer::from(element).pixels {
+            pixel.pos.x *= 2;
+            self.draw(&pixel);
+            pixel.pos.x += 1;
+            self.draw(&pixel);
+        }
     }
 
     /// Display the `View`. `View` implements the `Display` trait and so can be rendered in many ways (such as `println!("{view}");`), but this is intended to be the fastest way possible.
@@ -113,7 +122,7 @@ impl View {
 }
 
 impl Canvas for View {
-    /// Plot a pixel to the `View`. Accepts a [`Vec2D`] (the position of the pixel), [`ColChar`] (what the pixel should look like/what colour it should be), and a [`Wrapping`] enum variant (Please see the [Wrapping] documentation for more info)
+    /// Plot a pixel to the `View`. Accepts a [`Vec2D`] (the position of the pixel), [`ColChar`] (what the pixel should look like/what colour it should be), and a [`WrappingMode`] enum variant (Please see the [`WrappingMode`] documentation for more info)
     fn plot(&mut self, pos: Vec2D, c: ColChar) {
         if let Some(wrapped_pos) = self.wrapping_mode.handle_bounds(pos, self.size()) {
             let i = self.width * wrapped_pos.y.unsigned_abs() as usize + wrapped_pos.x.unsigned_abs() as usize;
