@@ -11,7 +11,7 @@ const FPS: f32 = 30.0;
 const FOV: f64 = 48.0;
 
 fn main() {
-    let mut view = View::new(100, 60, ColChar::BACKGROUND);
+    let mut view = View::new(100, 60, ColChar::EMPTY);
 
     let mut viewport = Viewport::new(
         Transform3D::look_at_lh(
@@ -23,12 +23,12 @@ fn main() {
         view.center(),
     );
     viewport.objects.push(Mesh3D::default_cube());
-    // viewport.display_mode = DisplayMode::Wireframe { backface_culling: false };
 
     viewport.display_mode = DisplayMode::Illuminated {
         lights: vec![
             Light::new_ambient(0.3),
-            Light::new_directional(0.7, Vec3D::new(1.0, 1.0, 1.0)),
+            Light::new_directional(0.5, Vec3D::new(1.0, 1.0, 1.0)),
+            Light::new_directional(0.3, Vec3D::new(-1.0, 1.0, 0.5)),
         ],
     };
 
