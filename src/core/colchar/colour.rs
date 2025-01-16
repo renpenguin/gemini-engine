@@ -9,7 +9,7 @@ fn mul_by_f64_to_u8<T: Into<f64>>(value: T, rhs: f64) -> u8 {
     (value.into() * rhs).round() as u8
 }
 
-/// A struct to contain colour values. Can be created from RGB, HSV or greyscale values, but is ultimately stored as RGB.
+/// A struct to store colour values. Can be created from RGB, HSV or greyscale values, but is ultimately stored as RGB.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Colour {
     /// The red channel of the colour
@@ -18,36 +18,6 @@ pub struct Colour {
     pub g: u8,
     /// The blue channel of the colour
     pub b: u8,
-}
-
-impl FromStr for Colour {
-    type Err = String;
-
-    /// Colours should be passed in the format `<r>,<g>,<b>`, for example `255,0,0` for red
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.replace(' ', "");
-        let parts: Vec<&str> = s.split(',').collect();
-
-        if parts.len() != 3 {
-            return Err(String::from("Incorrect number of arguments, string must be in format r,g,b to be parsed correctly"));
-        }
-        println!("{parts:?}");
-
-        let mut nums = Vec::new();
-
-        for part in parts {
-            nums.push(match part.parse::<u8>() {
-                Ok(val) => val,
-                Err(_) => {
-                    return Err(String::from(
-                        "Could not parse part of argument, make sure it's a valid number",
-                    ))
-                }
-            });
-        }
-
-        Ok(Self::rgb(nums[0], nums[1], nums[2]))
-    }
 }
 
 impl Colour {
@@ -60,12 +30,6 @@ impl Colour {
     #[must_use]
     pub const fn rgb(r: u8, g: u8, b: u8) -> Self {
         Self { r, g, b }
-    }
-
-    /// Create a `Colour` from a single brightness value, resulting in a shade of grey
-    #[must_use]
-    pub const fn greyscale(v: u8) -> Self {
-        Self::rgb(v, v, v)
     }
 
     /// Create a `Colour` from an HSV value
@@ -88,13 +52,19 @@ impl Colour {
             (p, q, val),
             (t, p, val),
             (val, p, q),
-        ][(index % 6.0).floor() as usize];
+        ][index as usize];
 
         Self::rgb(
             mul_by_f64_to_u8(red, 255.0),
             mul_by_f64_to_u8(green, 255.0),
             mul_by_f64_to_u8(blue, 255.0),
         )
+    }
+
+    /// Create a `Colour` from a single brightness value, resulting in a shade of grey
+    #[must_use]
+    pub const fn greyscale(v: u8) -> Self {
+        Self::rgb(v, v, v)
     }
 }
 
@@ -129,5 +99,30 @@ impl MulAssign<f64> for Colour {
         self.r = mul_by_f64_to_u8(self.r, rhs);
         self.r = mul_by_f64_to_u8(self.g, rhs);
         self.r = mul_by_f64_to_u8(self.b, rhs);
+    }
+}
+
+impl FromStr for Colour {
+    type Err = String;
+
+    /// Colours should be passed in the format `<r>,<g>,<b>`, for example `255,0,0` for red
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let s = s.replace(' ', "");
+        let parts: Vec<&str> = s.split(',').collect();
+
+        if parts.len() != 3 {
+            return Err(String::from("Incorrect number of arguments, string must be in format r,g,b to be parsed correctly"));
+        }
+        println!("{parts:?}");
+
+        let mut nums = [0u8; 3];
+
+        for i in 0..3 {
+            nums[i] = parts[i].parse::<u8>().map_err(|_| {
+                String::from("Could not parse part of argument, make sure it's a valid number")
+            })?;
+        }
+
+        Ok(Self::rgb(nums[0], nums[1], nums[2]))
     }
 }

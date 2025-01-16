@@ -10,7 +10,7 @@ const FPS: f32 = 30.0;
 
 fn main() {
     let mut view = View::new(40, 8, ColChar::BACKGROUND).with_wrapping_mode(WrappingMode::Wrap);
-    let mut pixel = Pixel::new(Vec2D { x: 10, y: 5 }, ColChar::SOLID);
+    let mut pixel = Pixel::new(Vec2D::new(10, 5), ColChar::SOLID);
 
     loop {
         view.clear();

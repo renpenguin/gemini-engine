@@ -6,21 +6,22 @@ mod modifier;
 pub use colour::Colour;
 pub use modifier::Modifier;
 
-/// We use `ColChar` to say exactly what each pixel should look like and what colour it should be. That is, the [`View`](super::super::View)'s canvas is just a vector of `ColChar`s under the hood. `ColChar` has the [`text_char`](ColChar::text_char) and [`modifier`](ColChar::modifier) properties. [`text_char`](ColChar::text_char) is the single ascii character used as the "pixel" when the [`View`](super::super::View) is rendered, whereas [`modifier`](ColChar::modifier) can give that pixel a colour or make it bold/italic
+/// A coloured character. Made up of `text_char`, a single ascii character used as the "pixel" when drawn to a [`Canvas`](super::Canvas), and `modifier`, which gives that pixel a colour or makes it bold/italic
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ColChar {
-    /// The actual character that will dictate the appearance of the pixel
+    /// A single ascii character used as the "pixel" when drawn to a [`Canvas`](super::Canvas)
     pub text_char: char,
-    /// The modifier that will be applied to the text character
+    /// Defines the appearance of the character - colour, bold/italic, etc.
     pub modifier: Modifier,
 }
 
 impl ColChar {
     /// A solid █ character with no [`Modifier`].
     ///
+    /// ## Example
     /// Using a sequence like this will create a red █ `ColChar`
     /// ```rs
-    /// ColChar::SOLID.with_rgb(255,0,0)
+    /// ColChar::SOLID.with_rgb(255, 0, 0)
     /// ```
     pub const SOLID: Self = Self {
         text_char: '█',
@@ -36,9 +37,11 @@ impl ColChar {
         text_char: ' ',
         modifier: Modifier::None,
     };
-    /// For use with the [`Sprite`](crate::elements::Sprite) and [`Text`](crate::elements::Text) elements, which consider a regular whitespace a transparent character
+    /// An opaque whitespace character (`\u{2008}`) with no [`Modifier`]
+    ///
+    /// ASCII Whitespaces are interpreted as transparent by [`ascii`](crate::ascii) elements. If you want opacity, use this void character
     pub const VOID: Self = Self {
-        text_char: '\u{2008}',
+        text_char: ' ', // \u{2008}
         modifier: Modifier::None,
     };
 
@@ -51,35 +54,35 @@ impl ColChar {
         }
     }
 
-    /// Return a `ColChar` with the same `modifier` and new `text_char`
+    /// Return a `ColChar` with the same modifier and new `text_char`
     #[must_use]
     pub const fn with_char(mut self, text_char: char) -> Self {
         self.text_char = text_char;
         self
     }
 
-    /// Return a `ColChar` with the same `text_char` and new `modifier`
+    /// Return a `ColChar` with the same `text_char` and new modifier
     #[must_use]
     pub const fn with_mod(mut self, modifier: Modifier) -> Self {
         self.modifier = modifier;
         self
     }
 
-    /// Return a `ColChar` with the same `text_char` and new `modifier` of the `Modifier::Colour` enum variant from an HSV value
+    /// Return a `ColChar` with the same `text_char` and new `Modifier::Colour` modifier
     #[must_use]
     pub const fn with_colour(mut self, colour: Colour) -> Self {
         self.modifier = Modifier::Colour(colour);
         self
     }
 
-    /// Return a `ColChar` with the same `text_char` and new `modifier` of the `Modifier::Colour` enum variant from RGB values
+    /// Return a `ColChar` with the same `text_char` and new `Modifier::Colour` modifier from an RGB value
     #[must_use]
     pub const fn with_rgb(mut self, r: u8, g: u8, b: u8) -> Self {
         self.modifier = Modifier::from_rgb(r, g, b);
         self
     }
 
-    /// Return a `ColChar` with the same `text_char` and new `modifier` of the `Modifier::Colour` enum variant from HSV values
+    /// Return a `ColChar` with the same `text_char` and new `Modifier::Colour` modifier from an RGB value
     #[must_use]
     pub fn with_hsv(mut self, h: u8, s: u8, v: u8) -> Self {
         self.modifier = Modifier::from_hsv(h, s, v);

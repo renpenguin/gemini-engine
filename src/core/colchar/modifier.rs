@@ -1,34 +1,38 @@
 use super::Colour;
 use std::fmt::Display;
 
-/// The `Modifier` enum is used for adding modifications to text such as colour, bold/italic/underline and others. It's essentially a wrapper for `\x1b[{x}m`, where {x} is a code or rgb value of some sort. `Modifier` is primarily used by [`ColChar`](super::ColChar) as one of its properties
+/// The [`Modifier`] enum is used for adding modifications to text such as colour, bold/italic/underline and others. `Modifier` should be used through [`ColChar`](super::ColChar).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Modifier {
-    /// Represents a [`Modifier`] by an escape code. A `Modifier::Coded(31)` would return a `\x1b[31m`.
+    /// `Coded(u8)` unwraps to `\x1b[{x}m`, where `x` is the code.
     ///
-    /// See <https://prirai.github.io/blogs/ansi-esc/#colors-graphics-mode> for codes you can use
+    /// For example, `Coded(0)` (available as `Modifier::END`) clears all previously applied modifiers. When displayed, `Modifier::Coded(31)` writes `\x1b[31m`.
+    ///
+    /// See <https://prirai.github.io/blogs/ansi-esc/#colors-graphics-mode> for a guide to available code
     Coded(u8),
-    /// Represents a `Modifier` by a [`Colour`], which itself is an RGB value
+    /// `Colour(`[`Colour`](Colour)`)` unwraps to `\x1b[38;2;{r};{g};{b}m`, where `(r, g, b)` together represent a 24 bit RGB value
+    ///
+    /// Not all terminals support RGB ANSI escape codes, in which case you will have to resort to `Modifier::Coded` for colours. Some `Coded` colours are available as constants, e.g. [`Modifier::RED`]
     Colour(Colour),
-    /// Represents a lack of `Modifier`, if you don't want the pixel to be coloured or decorated in any way
+    /// `None` unwraps to nothing. It does not change the current applied modifiers.
     #[default]
     None,
 }
 
 impl Modifier {
-    /// An END code, this clears all previously applied modifiers. You should never have to use this yourself as `View` makes use of it between pixels where necessary
+    /// An END code, which clears all previously applied modifiers. You should never have to use this yourself as `View` makes use of it between pixels where necessary
     pub const END: Self = Self::Coded(0);
-    /// A `Modifier` with a red ANSI escape code
+    /// A red ANSI escape code
     pub const RED: Self = Self::Coded(31);
-    /// A Modifier with a green ANSI escape code
+    /// A green ANSI escape code
     pub const GREEN: Self = Self::Coded(32);
-    /// A Modifier with a yellow ANSI escape code
+    /// A yellow ANSI escape code
     pub const YELLOW: Self = Self::Coded(33);
-    /// A Modifier with a blue ANSI escape code
+    /// A blue ANSI escape code
     pub const BLUE: Self = Self::Coded(34);
-    /// A Modifier with a purple ANSI escape code
+    /// A purple ANSI escape code
     pub const PURPLE: Self = Self::Coded(35);
-    /// A Modifier with a cyan ANSI escape code
+    /// A cyan ANSI escape code
     pub const CYAN: Self = Self::Coded(36);
 
     /// Create a `Modifier::Colour` from an RGB value
