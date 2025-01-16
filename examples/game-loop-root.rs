@@ -7,8 +7,6 @@ use gemini_engine::{
     view::{View, WrappingMode},
 };
 
-const FPS: f32 = 30.0;
-
 struct Game {
     view: View,
     pixel: Pixel,
@@ -24,7 +22,9 @@ impl Game {
 }
 
 impl MainLoopRoot for Game {
-    type InputDataType = bool; // dummy type, since it isn't used in this project
+    type InputDataType = (); // dummy type, since it isn't used in this project
+    const FPS: f32 = 30.0;
+
     fn frame(&mut self, _input_data: Option<Self::InputDataType>) {
         self.pixel.pos.x += 1;
     }
@@ -38,5 +38,5 @@ impl MainLoopRoot for Game {
 fn main() {
     let mut game = Game::new();
 
-    game.main_loop(FPS);
+    game.main_loop();
 }

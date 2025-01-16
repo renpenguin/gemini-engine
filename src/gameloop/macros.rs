@@ -1,57 +1,67 @@
-/// You can use the `fps_gameloop!` macro to avoid writing a lot of boilerplate code. Take this block of code from a program written with gemini
-/// ```rust,no_run
-/// # use gemini_engine::{elements::view::{View, ColChar, Wrapping, Vec2D}, elements3d::{Viewport, Mesh3D, Transform3D, DisplayMode}, gameloop};
+/// You can use the `fps_gameloop!` macro to avoid writing a lot of boilerplate code. Take this block of code from a program written with gemini, for example:
+/// ```no_run
+/// # use gemini_engine::{core::{ColChar, Vec2D}, view::View, mesh3d::{Mesh3D, Transform3D}, view3d::Viewport, gameloop};
+/// # use std::time::Instant;
 /// # let mut view = View::new(0, 0, ColChar::BACKGROUND);
-/// # let viewport = Viewport::new(Transform3D::default(), 0.0, Vec2D::ZERO);
-/// let mut cube = Mesh3D::default_cube();
-///
+/// # let mut viewport = Viewport::new(Transform3D::default(), 0.0, Vec2D::ZERO);
+/// viewport.objects.push(Mesh3D::default_cube());
 /// let FPS = 30.0;
+///
 /// let mut frame_skip = false;
 /// loop {
-///     let now = gameloop::Instant::now();
+///     let now = Instant::now();
 ///
 ///     // Logic
-///     cube.transform.rotation.y += 0.1;
+///     let cube_transform = &mut viewport.objects[0].transform;
+///     *cube_transform = cube_transform
+///         .mul_mat4(&Transform3D::from_rotation_y(-0.05));
 ///
 ///     if frame_skip {
 ///         frame_skip = false;
 ///     } else {
-///         view.clear();
 ///         // Rendering
-///         view.blit(&viewport.render(vec![&cube], DisplayMode::Solid), Wrapping::Ignore);
+///         view.clear();
+///         view.draw(&viewport);
 ///         view.display_render().unwrap();
 ///     }
 ///     let elapsed = now.elapsed();
 ///     frame_skip = gameloop::sleep_fps(FPS, Some(elapsed));
 /// }
 /// ```
-/// There's a lot of very repetitive code here. That's where this macro comes in. Here is the same block of code, rewritten with `fps_gameloop!`:
-/// ```rust,no_run
-/// # use gemini_engine::{elements::view::{View, ColChar, Wrapping, Vec2D}, elements3d::{Viewport, Mesh3D, Transform3D, DisplayMode}, fps_gameloop};
+/// There's a lot of boilerplate code here. That's where this macro comes in. Here is the same block of code, rewritten with `fps_gameloop!`:
+/// ```no_run
+/// # use gemini_engine::{core::{ColChar, Vec2D}, view::View, view3d::{Viewport, DisplayMode}, mesh3d::{Mesh3D, Transform3D}, fps_gameloop};
 /// # let mut view = View::new(0, 0, ColChar::BACKGROUND);
-/// # let viewport = Viewport::new(Transform3D::default(), 0.0, Vec2D::ZERO);
-/// let mut cube = Mesh3D::default_cube();
-///
+/// # let mut viewport = Viewport::new(Transform3D::default(), 0.0, Vec2D::ZERO);
+/// viewport.objects.push(Mesh3D::default_cube());
 /// let FPS = 30.0;
+///
 /// fps_gameloop!(
 ///     {
-///         cube.transform.rotation.y += 0.1;
+///         let cube_transform = &mut viewport.objects[0].transform;
+///         *cube_transform = cube_transform
+///             .mul_mat4(&Transform3D::from_rotation_y(-0.05));
 ///     },
 ///     {
 ///         view.clear();
-///         view.blit(&viewport.render(vec![&cube], DisplayMode::Solid), Wrapping::Ignore);
+///         view.draw(&viewport);
 ///         view.display_render().unwrap();
 ///     },
 ///     FPS
 /// );
 /// ```
-/// The code is now a lot less cluttered. This macro accepts three fragments (and an optional fourth fragment). A logic block fragment (contained inside `{}` brackets) for code that should run every single frame, a render block fragment for code related to displaying to the terminal (all plots, blits and renders) and a `f32` fragment representing the desired frames per second. The fourth optional fragment is to be a function that accepts a [`Duration`](std::time::Duration) parameter representing the time taken to render everything and a `bool` parameter representing whether the last frame was skipped or not. It can be used to, say, print debug info. Here's an example:
-/// ```rust,no_run
+/// The code is now a lot less cluttered. This macro accepts three fragments (and an optional fourth fragment):
+/// - A logic block fragment for code that should run every single frame
+/// - A render block fragment for code related to displaying to the terminal (all plots, draws and renders). This will not run if the previous frame took too long
+/// - An `f32` fragment representing the desired frames per second.
+/// - Optionally, a function of type `Fn(`[`Duration`](std::time::Duration)`, bool)`. The passed duration will be the time taken to render everything, and the passed `bool` indicates whether the last frame was skipped or not. It can be used to, say, print debug info. Here's an example:
+/// ```no_run
 /// # use gemini_engine::{fps_gameloop, gameloop};
+/// # use std::time::Duration;
 /// fps_gameloop!(
-///     // -- other f ields --
+///     // -- other fields --
 /// #   {}, {}, 0.0,
-///     |elapsed: gameloop::Duration, frame_skip: bool| {
+///     |elapsed: Duration, frame_skip: bool| {
 ///         println!(
 ///             "Elapsed: {:.2?}µs | Frame skip: {}",
 ///             elapsed.as_micros(),
@@ -65,7 +75,7 @@ macro_rules! fps_gameloop {
         fps_gameloop!($logic, $render, $fps, |_, _| ());
     };
     ($logic:block, $render:block, $fps:expr, $handle_elapsed:expr) => {
-        use gemini_engine::gameloop::{sleep_fps, Instant};
+        use std::time::Instant;
         let mut frame_skip = false;
         loop {
             let now = Instant::now();
@@ -83,7 +93,7 @@ macro_rules! fps_gameloop {
             ($handle_elapsed)(now.elapsed(), frame_skip);
 
             let elapsed = now.elapsed();
-            frame_skip = sleep_fps($fps, Some(elapsed));
+            frame_skip = gemini_engine::gameloop::sleep_fps($fps, Some(elapsed));
         }
     };
 }

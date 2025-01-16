@@ -1,14 +1,15 @@
 use std::{thread::sleep, time::Duration};
 
-/// Sleep for a single frame at the declared FPS, subtracting the input `Duration` to account for any time spent processing the frame. Returns a bool value depending on whether or not the frame took longer to render than the intended fps
-/// # Example
-/// ```rust,no_run
+/// Sleep for a single frame at the declared FPS, subtracting the input `Duration` to account for any time spent processing the frame. Returns a `bool` indicating whether the frame took longer to render than the intended fps wait (i.e. if there was an FPS drop)
+/// ## Example
+/// ```no_run
 /// use gemini_engine::gameloop;
+/// use std::time::Instant;
 ///
 /// let mut frame_skip = false;
 /// const FPS: f32 = 60.0;
 /// loop {
-///     let now = gameloop::Instant::now();
+///     let now = Instant::now();
 ///
 ///     // all code here will run at 60 FPS
 ///
