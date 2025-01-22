@@ -6,11 +6,11 @@ use super::TextAlign;
 #[non_exhaustive]
 #[derive(Debug, Clone)]
 pub struct Text {
-    /// The position of the text. You can use [`Text::align`] to determine how it aligns to this position
+    /// The position that the text is drawn from.
     pub pos: Vec2D,
     /// The actual text content of the element
     pub content: String,
-    /// How the content should align to the position
+    /// How the content should align to the `pos` property
     pub align: TextAlign,
     /// A raw [`Modifier`], determining the appearance of the `Text`
     pub modifier: Modifier,
@@ -36,7 +36,7 @@ impl Text {
         }
     }
 
-    /// Return the `Text` with the modified align property
+    /// Return the `Text` with an updated `align` property. Consumes the original `Text`
     #[must_use]
     pub const fn with_align(mut self, align: TextAlign) -> Self {
         self.align = align;

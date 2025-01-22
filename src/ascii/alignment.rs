@@ -1,6 +1,6 @@
 use crate::core::Vec2D;
 
-/// An enum to set the alignment of a Text element's content
+/// An enum to determine the alignment of an [ascii](super) element's content
 #[derive(Debug, Clone, Copy)]
 pub enum TextAlign {
     /// Align to the beginning of the text
@@ -23,7 +23,7 @@ impl TextAlign {
     }
 }
 
-/// Two-dimensional text align, used by [`Sprite`](super::Sprite) and all variations
+/// Two-dimensional text align, used by [`Sprite`](super::Sprite) and [`AnimatedSprite`](super::AnimatedSprite)
 #[derive(Debug, Clone, Copy)]
 pub struct TextAlign2D {
     /// X coordinate [`TextAlign`]. `TextAlign::Begin` is left
@@ -39,7 +39,7 @@ impl Default for TextAlign2D {
 }
 
 impl TextAlign2D {
-    /// Align to centre of text
+    /// Align to centre of text in both X and Y axes
     pub const CENTERED: Self = Self::new(TextAlign::Centered, TextAlign::Centered);
 
     /// Create a new `TextAlign2D` with a given x and y align

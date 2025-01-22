@@ -1,7 +1,7 @@
 use super::{Text, TextAlign2D};
 use crate::core::{CanDraw, Modifier, Vec2D};
 
-/// The `Sprite` takes a multi-line string as a parameter, and can be used to put ASCII art, text and other such things on the `View`
+/// The `Sprite` takes a multi-line string as a parameter, and can be used to draw ASCII art to a `Canvas`
 #[non_exhaustive]
 #[derive(Debug, Clone)]
 pub struct Sprite {
@@ -27,7 +27,7 @@ impl Sprite {
         }
     }
 
-    /// Return the `Sprite` with the modified align property
+    /// Return the `Sprite` with an updated `align` property. Consumes the original `Sprite`
     #[must_use]
     pub const fn with_align(mut self, align: TextAlign2D) -> Self {
         self.align = align;

@@ -1,7 +1,7 @@
 use super::{Sprite, TextAlign2D};
 use crate::core::{CanDraw, Modifier, Vec2D};
 
-/// The `AnimatedSprite` struct contains a list of `String`s into which it indexes based on its [`current_frame`](AnimatedSprite::current_frame) property. You can cycle through frames with the [`AnimatedSprite::next_frame()`](AnimatedSprite::next_frame()) function
+/// The `AnimatedSprite` struct contains a list of `String`s into which it indexes based on its `current_frame` property. You can cycle through frames with the [`AnimatedSprite::next_frame()`](AnimatedSprite::next_frame()) function
 pub struct AnimatedSprite {
     /// The position from which the animated sprite will be drawn from
     pub pos: Vec2D,
@@ -50,11 +50,12 @@ impl AnimatedSprite {
         self.current_frame += 1;
         self.current_frame %= self.frames.len();
     }
-
 }
 
 impl CanDraw for AnimatedSprite {
     fn draw_to(&self, canvas: &mut impl crate::core::Canvas) {
-        Sprite::new(self.pos, &self.frames[self.current_frame], self.modifier).draw_to(canvas);
+        Sprite::new(self.pos, &self.frames[self.current_frame], self.modifier)
+            .with_align(self.align)
+            .draw_to(canvas);
     }
 }

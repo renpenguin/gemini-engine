@@ -1,4 +1,4 @@
-//! This module holds the structs related to display of ASCII characters, both text and ASCII art
+//! This module holds the structs related to displaying text and ASCII art on a [`Canvas`](crate::core::Canvas)
 
 mod animated_sprite;
 pub use animated_sprite::AnimatedSprite;
