@@ -25,26 +25,21 @@ impl PixelContainer {
         Self { pixels: vec![] }
     }
 
-    /// Add a single pixel to the `PixelContainer`
-    pub fn push(&mut self, pixel: Pixel) {
-        self.pixels.push(pixel);
+    /// Plot a pixel to the `PixelContainer`
+    pub fn plot(&mut self, pos: Vec2D, c: ColChar) {
+        self.pixels.push(Pixel::new(pos, c));
     }
 
-    /// Move another `PixelContainer`'s contents into this one
-    pub fn extend(&mut self, pixels: &mut Vec<Pixel>) {
+    /// Moves all the pixels of `other` into `self`, leaving `other` empty
+    pub fn append(&mut self, pixels: &mut Vec<Pixel>) {
         self.pixels.append(pixels);
     }
 
-    /// Append vector of coordinates and a single [`ColChar`] for all of them.
+    /// Append a slice of `Vec2D` points which all share a [`ColChar`]
     pub fn append_points(&mut self, points: &[Vec2D], fill_char: ColChar) {
         for point in points {
-            self.push(Pixel::new(*point, fill_char));
+            self.plot(*point, fill_char);
         }
-    }
-
-    /// Plot a pixel to the `PixelContainer`
-    pub fn plot(&mut self, pos: Vec2D, c: ColChar) {
-        self.push(Pixel::new(pos, c));
     }
 
     /// Draw a struct implementing [`CanDraw`] to the `PixelContainer`.
@@ -93,7 +88,7 @@ impl From<(&[Vec2D], ColChar)> for PixelContainer {
 
 impl Canvas for PixelContainer {
     fn plot(&mut self, pos: Vec2D, c: ColChar) {
-        self.push(Pixel::new(pos, c));
+        self.plot(pos, c);
     }
 }
 

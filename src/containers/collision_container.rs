@@ -5,12 +5,12 @@ use crate::{
 
 /// Must be implemented to be used by the [`CollisionContainer`]
 pub trait CanCollide {
-    /// Return `true` if the collider collides with the passed new position
+    /// Returns `true` if the collider intersects the passed position
     #[must_use]
     fn collides_with_pos(&self, pos: Vec2D) -> bool;
 }
 
-/// Contains references to all added objects. Meant to be used specifically for collision calculations
+/// Container for references to collider objects
 #[derive(Clone)]
 pub struct CollisionContainer<'a> {
     /// The elements used to define the collision hitbox. This can be anything that implements [`CanCollide`]
@@ -50,16 +50,16 @@ impl<'a> CollisionContainer<'a> {
 }
 
 impl<'a> CanCollide for CollisionContainer<'a> {
-    /// Returns true if there is an element from the `CollisionContainer` at the given coordinates
+    /// Returns true if one of the elements in the `CollisionContainer` intersects the passed position
     fn collides_with_pos(&self, pos: Vec2D) -> bool {
         self.elements.iter().any(|e| e.collides_with_pos(pos))
     }
 }
 
-impl<'a> From<&[&'a dyn CanCollide]> for CollisionContainer<'a> {
-    fn from(elements: &[&'a dyn CanCollide]) -> Self {
+impl<'a> From<&'a dyn CanCollide> for CollisionContainer<'a> {
+    fn from(element: &'a dyn CanCollide) -> Self {
         Self {
-            elements: elements.to_vec(),
+            elements: vec![element],
         }
     }
 }

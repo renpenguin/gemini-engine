@@ -1,4 +1,4 @@
-//! This module holds every struct designed to contain various `ViewElement`s. Since every container is itself a [`ViewElement`](super::view::ViewElement), containers can be combined by nesting inside of each other.
+//! This modules holds some miscellaneous tools for containing and manipulating `CanDraw` elements. Since every container itself implements [`Candraw`](crate::core::CanDraw), containers can often be combined by nesting inside of each other.
 
 mod visibility_toggle;
 pub use visibility_toggle::VisibilityToggle;
