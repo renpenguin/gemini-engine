@@ -37,7 +37,7 @@ fn main() {
         Modifier::from_rgb(20, 200, 0),
     );
 
-    let mut blit_elapsed = Duration::default();
+    let mut draw_elapsed = Duration::default();
     let mut render_elapsed = Duration::default();
     fps_gameloop!(
         {
@@ -65,7 +65,7 @@ fn main() {
             view.draw(&rect);
             view.wrapping_mode = WrappingMode::Wrap;
             view.draw(&sprite);
-            blit_elapsed = now.elapsed();
+            draw_elapsed = now.elapsed();
 
             let now = Instant::now();
             let _ = view.display_render();
@@ -74,8 +74,8 @@ fn main() {
         FPS,
         |total_elapsed: Duration, _frame_skip| {
             println!(
-                "Blitting: {:.2?} microseconds | Rendering: {:.2?} microseconds| Total: {:.2?}",
-                blit_elapsed.as_micros(),
+                "Drawing: {:.2?} microseconds | Rendering: {:.2?} microseconds| Total: {:.2?}",
+                draw_elapsed.as_micros(),
                 render_elapsed.as_micros(),
                 total_elapsed.as_micros()
             );

@@ -82,7 +82,7 @@ impl ColChar {
         self
     }
 
-    /// Return a `ColChar` with the same `text_char` and new `Modifier::Colour` modifier from an RGB value
+    /// Return a `ColChar` with the same `text_char` and new `Modifier::Colour` modifier from an HSV value
     #[must_use]
     pub fn with_hsv(mut self, h: u8, s: u8, v: u8) -> Self {
         self.modifier = Modifier::from_hsv(h, s, v);
