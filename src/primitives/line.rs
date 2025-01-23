@@ -1,6 +1,6 @@
 use crate::core::{ColChar, CanDraw, Vec2D};
 
-/// The `Line` takes two [`Vec2D`]s and returns a line between those vertices when blit to a [`View`](super::super::View)
+/// A line primitive which implements [`CanDraw`], and so can be drawn to [Canvas](crate::core::Canvas)es
 pub struct Line {
     /// The start positon of the line
     pub pos0: Vec2D,
@@ -11,7 +11,7 @@ pub struct Line {
 }
 
 impl Line {
-    /// Create a new line with a start and end point and a [`ColChar`]
+    /// Create a new `Line` with a start and end point and a [`ColChar`]
     #[must_use]
     pub const fn new(pos0: Vec2D, pos1: Vec2D, fill_char: ColChar) -> Self {
         Self {

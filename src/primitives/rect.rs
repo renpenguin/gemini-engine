@@ -1,17 +1,17 @@
 use crate::core::{CanDraw, ColChar, Vec2D};
 
-/// The `Rect` takes a position and size, and returns a rectangle at that position with the given width and size when blit to a [`View`](super::super::View)
+/// A rectangle primitive which implements [`CanDraw`], and so can be drawn to [Canvas](crate::core::Canvas)es
 pub struct Rect {
     /// The position of the top-left corner of the `Rect`
     pub pos: Vec2D,
-    /// The size of the `Rect`, extending from [`Rect::pos`]
+    /// The size of the `Rect`, extending from `pos`
     pub size: Vec2D,
     /// The [`ColChar`] used to fill the rectangle
     pub fill_char: ColChar,
 }
 
 impl Rect {
-    /// Create a new rectangle using a given position, size and [`ColChar`]
+    /// Create a new `Rect` using a position and size
     #[must_use]
     pub const fn new(pos: Vec2D, size: Vec2D, fill_char: ColChar) -> Self {
         Self {
@@ -21,10 +21,16 @@ impl Rect {
         }
     }
 
-    /// Create a new rectangle between two position to fill with a [`ColChar`]
+    /// Create a new `Rect` using two positions
     #[must_use]
-    pub fn new_from_to(pos0: Vec2D, pos1: Vec2D, fill_char: ColChar) -> Self {
-        Self::new(pos0, pos1 - pos0, fill_char)
+    pub fn new_from_to(top_left: Vec2D, bottom_right: Vec2D, fill_char: ColChar) -> Self {
+        Self::new(top_left, bottom_right - top_left + Vec2D::ONE, fill_char)
+    }
+
+    /// Return the coordinates of the bottom right point
+    #[must_use]
+    pub fn bottom_right(&self) -> Vec2D {
+        self.pos + self.size - Vec2D::ONE
     }
 }
 

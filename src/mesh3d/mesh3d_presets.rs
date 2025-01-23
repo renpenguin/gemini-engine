@@ -9,7 +9,7 @@ use crate::{
 use super::{Mesh3D, Vec3D, Transform3D};
 
 impl Mesh3D {
-    /// The `gemini_engine` equivalent of Blender's default cube. Has side lengths of 2
+    /// The `gemini_engine` equivalent of Blender's default cube. Has sides of length 2
     #[must_use]
     pub fn default_cube() -> Self {
         Self::new(
@@ -86,7 +86,7 @@ impl Mesh3D {
     /// - Z (blue) increases as you move away from the viewport
     ///
     /// Think of it like Blender's axes but with Y and Z swapped.
-    /// This Mesh does not render in `DisplayMode::SOLID` (see [`DisplayMode`](super::super::DisplayMode) documentation)
+    /// Since this Mesh does not have a real triangle mesh, it is only visible in [`DisplayMode::Wireframe`](crate::view3d::DisplayMode)
     #[must_use]
     pub fn gimbal() -> Self {
         Self::new(

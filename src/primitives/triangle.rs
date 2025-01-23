@@ -2,9 +2,7 @@ use crate::core::{ColChar, Vec2D, CanDraw};
 
 use super::Line;
 
-
-
-/// The `Triangle` takes three [`Vec2D`]s and returns a triangle with those vertices when blit to a [`Canvas`](crate::core::Canvas)
+/// A triangle primitive which implements [`CanDraw`], and so can be drawn to [Canvas](crate::core::Canvas)es
 pub struct Triangle {
     /// The 3 corners of the triangle
     pub corners: [Vec2D; 3],
@@ -13,13 +11,13 @@ pub struct Triangle {
 }
 
 impl Triangle {
-    /// Create a new triangle from three separate positions and a `ColChar`
+    /// Create a new `Triangle` from three separate positions and a `ColChar`
     #[must_use]
     pub const fn new(pos0: Vec2D, pos1: Vec2D, pos2: Vec2D, fill_char: ColChar) -> Self {
         Self::with_array([pos0, pos1, pos2], fill_char)
     }
 
-    /// Create a new triangle from an array of `Vec2D`s and a `ColChar`
+    /// Create a new `Triangle` from an array of `Vec2D`s and a `ColChar`
     #[must_use]
     pub const fn with_array(corners: [Vec2D; 3], fill_char: ColChar) -> Self {
         Self { corners, fill_char }

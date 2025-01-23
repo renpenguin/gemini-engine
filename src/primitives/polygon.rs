@@ -1,7 +1,9 @@
 use super::Triangle;
 use crate::core::{CanDraw, ColChar, Vec2D};
 
-/// A `Polygon` draws a polygon with the chosen vertices by triangulating them
+/// A polygon primitive which implements [`CanDraw`], and so can be drawn to [Canvas](crate::core::Canvas)es
+///
+/// It uses triangulation to draw the polygon
 pub struct Polygon {
     /// The vertices that make up the `Polygon`
     pub vertices: Vec<Vec2D>,
