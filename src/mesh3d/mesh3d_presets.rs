@@ -1,6 +1,7 @@
 //! This file contains the presets available when spawning a [`Mesh3D`]
 
 use crate::core::{ColChar, Modifier};
+use std::f64::consts::TAU;
 
 use super::{Face, Mesh3D, Transform3D, Vec3D};
 
@@ -42,7 +43,7 @@ impl Mesh3D {
         let mut faces = vec![];
 
         for outer_i in 0..outer_segments {
-            let outer_angle = (outer_i as f64 / outer_segments as f64) * 2.0 * PI;
+            let outer_angle = (outer_i as f64 / outer_segments as f64) * TAU;
             let outer_transform = Transform3D::from_rotation_y(-outer_angle);
             let outer_point = Vec3D::new(
                 outer_angle.cos() * outer_radius,
@@ -51,7 +52,7 @@ impl Mesh3D {
             );
 
             for inner_i in 0..inner_segments {
-                let inner_angle = (inner_i as f64 / inner_segments as f64) * 2.0 * PI;
+                let inner_angle = (inner_i as f64 / inner_segments as f64) * TAU;
                 let inner_point = Vec3D::new(
                     inner_angle.cos() * inner_radius,
                     inner_angle.sin() * inner_radius,

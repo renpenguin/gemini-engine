@@ -11,9 +11,9 @@ const FPS: f32 = 60.0;
 const FOV: f64 = 95.0;
 
 fn main() {
-    let mut view = View::new(100, 60, ColChar::EMPTY);
+    let mut view = View::new(100, 45, ColChar::EMPTY);
     let mut viewport = Viewport::new(
-        Transform3D::look_at_lh(Vec3D::new(0.0, -1.5, 4.0), Vec3D::ZERO, Vec3D::Y),
+        Transform3D::look_at_lh(Vec3D::new(0.0, -3.0, 6.0), Vec3D::ZERO, Vec3D::Y),
         FOV,
         view.center(),
     );
@@ -30,8 +30,8 @@ fn main() {
     fps_gameloop!(
         {
             let donut_tr = &mut viewport.objects[0].transform;
-            *donut_tr = donut_tr.mul_mat4(&Transform3D::from_rotation_x(0.01));
-            *donut_tr = donut_tr.mul_mat4(&Transform3D::from_rotation_y(0.03));
+            *donut_tr = donut_tr.mul_mat4(&Transform3D::from_rotation_y(-0.03));
+            *donut_tr = donut_tr.mul_mat4(&Transform3D::from_rotation_x(0.03));
         },
         {
             view.clear();

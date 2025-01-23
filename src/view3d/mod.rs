@@ -115,7 +115,7 @@
 //! This part of the code renders all the 3d stuff to the [`View`](crate::elements::view::View) and blits it to the view before rendering as usual. [`Viewport.render()`](Viewport) takes a list of all the objects we want to render and a [`DisplayMode`] enum (more info in the [`DisplayMode`] documentation).
 
 use crate::{
-    core::{CanDraw, ColChar, Vec2D},
+    core::{CanDraw, Vec2D},
     mesh3d::{Mesh3D, Transform3D},
     primitives::{Line, Polygon},
 };
@@ -165,23 +165,22 @@ impl Viewport {
 
     /// Transform the vertices with the object transform, view transform and perspective transform
     fn get_vertices_on_screen(&self, object: &Mesh3D) -> Vec<ProjectedVertex> {
+        let world_transform = self.camera_transform.mul_mat4(&object.transform);
         let perspective =
             Transform3D::perspective_infinite_rh(self.fov.to_radians(), 1.0, self.clipping_distace);
+
         let centre = DVec2::new(self.canvas_centre.x as f64, self.canvas_centre.y as f64);
-        let size = DVec2::splat(centre.min_element());
+        let size = DVec2::splat(centre.max_element());
+
         object
             .vertices
             .iter()
-            .map(|v| object.transform.transform_point3(*v)) // Object transform
-            .map(|v| self.camera_transform.transform_point3(v)) // Camera transform
-            .map(|v| (v, perspective.project_point3(v))) // Perspective
-            .map(|(v, pv)| {
-                (
-                    v,
-                    DVec2::new(pv.x * self.character_width_multiplier, -pv.y) * size + centre,
-                )
-            }) // Map to screen
-            .map(|(v, pv)| ProjectedVertex::new(v, Vec2D::new(pv.x as i64, pv.y as i64)))
+            .map(|v| {
+                let v = world_transform.transform_point3(*v); // Object and camera transform
+                let pv = perspective.project_point3(v); // Perspective
+                let pv = DVec2::new(pv.x * self.character_width_multiplier, -pv.y) * size + centre;
+                ProjectedVertex::new(v, Vec2D::new(pv.x as i64, pv.y as i64))
+            })
             .collect()
     }
 
@@ -191,27 +190,20 @@ impl Viewport {
 
         for object in &self.objects {
             let vertices = self.get_vertices_on_screen(object);
-
             for face in &object.faces {
                 let face_vertices = face.index_into(&vertices);
 
-                // Backface culling
+                for v in &face_vertices {
+                    if v.original.z <= self.clipping_distace {
+                        continue; // Do not render if behind player
+                    }
+                }
+
                 if backface_culling && !projected_face::is_clockwise(&face_vertices) {
-                    continue;
+                    continue; // Backface culling
                 }
 
-                // Do not render if behind player
-                if face_vertices
-                    .iter()
-                    .any(|v| v.original.z <= self.clipping_distace)
-                {
-                    continue;
-                }
-
-                screen_faces.push(ProjectedFace::new(
-                    face_vertices,
-                    face.fill_char,
-                ));
+                screen_faces.push(ProjectedFace::new(face_vertices, face.fill_char));
             }
         }
 
@@ -256,25 +248,25 @@ impl CanDraw for Viewport {
                 let len_brightness_chars: f64 = brightness_chars.len() as f64;
 
                 for face in screen_faces {
-                    let fill_char = if let Some(normal) = face.normal {
-                        let intensity: f64 = lights
-                            .iter()
-                            .map(|light| {
-                                light.calculate_intensity(face.original_centre, normal)
-                            })
-                            .sum();
-
-                        let brightness_char_index = ((intensity * len_brightness_chars).round()
-                            as usize)
-                            .clamp(0, brightness_chars.len() - 1);
-                        let intensity_char = brightness_chars[brightness_char_index];
-
-                        ColChar::new(intensity_char, face.fill_char.modifier)
-                    } else {
-                        face.fill_char
+                    let Some(normal) = face.normal else {
+                        continue;
                     };
 
-                    Polygon::new(&face.vertices, fill_char).draw_to(canvas);
+                    let intensity: f64 = lights
+                        .iter()
+                        .map(|light| light.calculate_intensity(face.original_centre, normal))
+                        .sum();
+
+                    let brightness_char_index = ((intensity * len_brightness_chars).round()
+                        as usize)
+                        .clamp(0, brightness_chars.len() - 1);
+                    let intensity_char = brightness_chars[brightness_char_index];
+
+                    Polygon::new(
+                        &face.vertices,
+                        face.fill_char.with_char(intensity_char),
+                    )
+                    .draw_to(canvas);
                 }
             }
         }

@@ -9,10 +9,10 @@ use gemini_engine::{
 use std::time::Duration;
 
 const FPS: f32 = 30.0;
-const FOV: f64 = 48.0;
+const FOV: f64 = 80.0;
 
 fn main() {
-    let mut view = View::new(100, 60, ColChar::EMPTY);
+    let mut view = View::new(100, 50, ColChar::EMPTY);
 
     let mut viewport = Viewport::new(
         Transform3D::look_at_lh(Vec3D::new(0.0, -1.5, 4.3), Vec3D::ZERO, Vec3D::Y),
@@ -24,8 +24,7 @@ fn main() {
     viewport.display_mode = DisplayMode::Illuminated {
         lights: vec![
             Light::new_ambient(0.3),
-            Light::new_directional(0.5, Vec3D::new(1.0, 1.0, 1.0)),
-            Light::new_directional(0.3, Vec3D::new(-1.0, 1.0, 0.5)),
+            Light::new_directional(0.6, Vec3D::new(0.5, 1.0, 1.0)),
         ],
     };
 
