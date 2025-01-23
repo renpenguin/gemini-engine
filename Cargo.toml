@@ -19,7 +19,7 @@ default = ["3D"]
 
 [dependencies]
 terminal_size = "0.4.1"
-glam = "0.24.0"
+glam = "0.24.2"
 
 [lints.rust]
 missing_docs = "warn"
