@@ -1,12 +1,12 @@
 use crate::mesh3d::Vec3D;
 
-/// Characters for brightness. The first character is the darkest and the rightmost character is the brightest
+/// Characters for brightness. The first character is the darkest and the last character is the brightest
 pub const BRIGHTNESS_CHARS: &str = ".,-~:;=!*(%#$@";
 
-/// The
+/// Type of light, determines how the normal of a face affects its illumination
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum LightType {
-    /// Lights the entire scene equally. It's good to have at least one of these
+    /// Lights the entire scene equally. It's good to have at least one of these so your models don't go completely dark.
     Ambient,
 
     /// Lights the scene from a specific direction. A surface facing the specified direction will be lit with the most intensity and a surface facing away from the direction will be lit with the least intensity or no intensity at all
@@ -25,7 +25,7 @@ pub enum LightType {
 /// A light object used to define a scene's lighting. Used by [`DisplayMode::Illuminated`](super::DisplayMode::Illuminated)
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Light {
-    /// The type of light and the way it affects
+    /// The type of light and the way it affects faces based on their normals
     pub light_type: LightType,
     /// The intensity of the light
     pub intensity: f64,

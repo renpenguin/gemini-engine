@@ -7,9 +7,9 @@ pub use components::{Vec3D, Transform3D, Face};
 /// A 3D mesh made up of vertices, faces made of indices into `vertices`, and a transformation.
 #[derive(Debug, Clone)]
 pub struct Mesh3D {
-    /// The mesh's transform (position, rotation, scale) in 3D space
+    /// The mesh's transform matrix in 3D space
     pub transform: Transform3D,
-    /// A vector of the [`Mesh3D`]'s
+    /// A vector of the [`Mesh3D`]'s vertices
     pub vertices: Vec<Vec3D>,
     /// A vector of [`Face`]s of indexes into `vertices`
     pub faces: Vec<Face>,

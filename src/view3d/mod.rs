@@ -130,17 +130,19 @@ pub use display_mode::{
 };
 use projected_face::{ProjectedFace, ProjectedVertex};
 
-/// The `Viewport` handles printing 3D objects to a 2D [`View`](crate::elements::View), and also acts as the scene's camera.
+/// The `Viewport` handles drawing 3D objects to a 2D [`Canvas`](crate::core::Canvas), and also acts as the scene's camera.
 pub struct Viewport {
-    /// How the Viewport is oriented in the 3D scene
+    /// This transform is applied to every vertex in the scene. [`Transform3D::look_at_lh`] works best for this
     pub camera_transform: Transform3D,
     /// The Viewport's field of view, in degrees
     pub fov: f64,
-    /// The centre of the view you intend to draw to. [`View.size()`](crate::view::View::center) returns exactly what you need for this
+    /// The centre of the view you intend to draw to. [`View.centre()`](crate::view::View::center) returns exactly what you need for this
     pub canvas_centre: Vec2D,
+    /// The objects to be drawn on the screen
     pub objects: Vec<Mesh3D>,
+    /// The style in which the objects should be rendered. Read [`DisplayMode`] for more info
     pub display_mode: DisplayMode,
-    /// Most terminals don't have perfectly square characters. The value you set here is how much the final image will be stretched in the X axis to account for this. The default value is `2.2` but it will be different in most terminals
+    /// Most terminals don't have perfectly square characters. The value you set here is how much the final image will be stretched in the X axis to account for this. The default value is `2.0` but it will be different in most terminals
     pub character_width_multiplier: f64,
     /// Any face with vertices closer to the viewport than this value will be clipped
     pub clipping_distace: f64,
@@ -183,7 +185,7 @@ impl Viewport {
             .collect()
     }
 
-    /// Project the faces onto a 2D plane. Returns a collection of faces, each stored as a list of the points it appears at, the normal of the face and the [`ColChar`] assigned to it
+    /// Project the models' faces onto a 2D plane. Returns a collection of `ProjectedFace`s, each storing its projected vertices, normal and z index
     fn project_faces(&self, sort_faces: bool, backface_culling: bool) -> Vec<ProjectedFace> {
         let mut screen_faces = vec![];
 
@@ -215,7 +217,7 @@ impl Viewport {
 
         if sort_faces {
             screen_faces
-                .sort_by_key(|face| (face.get_average_centre().length() * -1000.0).round() as isize);
+                .sort_by_key(|face| (face.original_centre.length() * -1000.0).round() as isize);
         }
 
         screen_faces
@@ -223,6 +225,7 @@ impl Viewport {
 }
 
 impl CanDraw for Viewport {
+    /// Project the `models` and draw them onto a [`Canvas`](crate::core::Canvas)
     fn draw_to(&self, canvas: &mut impl crate::core::Canvas) {
         match &self.display_mode {
             DisplayMode::Wireframe { backface_culling } => {
@@ -230,11 +233,12 @@ impl CanDraw for Viewport {
 
                 for face in screen_faces {
                     for fi in 0..face.vertices.len() {
-                        let (i0, i1) = (
-                            face.vertices[fi].projected,
-                            face.vertices[(fi + 1) % face.vertices.len()].projected,
-                        );
-                        Line::new(i0, i1, face.fill_char).draw_to(canvas);
+                        Line::new(
+                            face.vertices[fi],
+                            face.vertices[(fi + 1) % face.vertices.len()],
+                            face.fill_char,
+                        )
+                        .draw_to(canvas);
                     }
                 }
             }
@@ -242,7 +246,7 @@ impl CanDraw for Viewport {
                 let screen_faces = self.project_faces(true, true);
 
                 for face in screen_faces {
-                    Polygon::new(&face.projected_vertices(), face.fill_char).draw_to(canvas);
+                    Polygon::new(&face.vertices, face.fill_char).draw_to(canvas);
                 }
             }
             DisplayMode::Illuminated { lights } => {
@@ -252,11 +256,11 @@ impl CanDraw for Viewport {
                 let len_brightness_chars: f64 = brightness_chars.len() as f64;
 
                 for face in screen_faces {
-                    let fill_char = if let Some(normal) = face.get_normal() {
+                    let fill_char = if let Some(normal) = face.normal {
                         let intensity: f64 = lights
                             .iter()
                             .map(|light| {
-                                light.calculate_intensity(face.get_average_centre(), normal)
+                                light.calculate_intensity(face.original_centre, normal)
                             })
                             .sum();
 
@@ -270,7 +274,7 @@ impl CanDraw for Viewport {
                         face.fill_char
                     };
 
-                    Polygon::new(&face.projected_vertices(), fill_char).draw_to(canvas);
+                    Polygon::new(&face.vertices, fill_char).draw_to(canvas);
                 }
             }
         }

@@ -38,36 +38,31 @@ impl ProjectedVertex {
 
 pub struct ProjectedFace {
     /// The face's points, both in 3D and projected 2D space
-    pub vertices: Vec<ProjectedVertex>,
+    pub vertices: Vec<Vec2D>,
+    /// The normal vector of the face
+    pub normal: Option<Vec3D>,
+    /// The distance from the camera
+    pub original_centre: Vec3D,
     /// The face's fill [`ColChar`]
     pub fill_char: ColChar,
 }
 
 impl ProjectedFace {
-    /// Create a new `ProjectedFace`
-    pub const fn new(vertices: Vec<ProjectedVertex>, fill_char: ColChar) -> Self {
+    pub fn new(vertices: Vec<ProjectedVertex>, fill_char: ColChar) -> Self {
+        let len = vertices.len();
+        let (original_vertices, vertices): (Vec<_>, Vec<_>) = vertices
+            .into_iter()
+            .map(|v| (v.original, v.projected))
+            .unzip();
         Self {
             vertices,
+            normal: (len >= 3).then(|| {
+                let v0 = original_vertices[0] - original_vertices[2];
+                let v1 = original_vertices[1] - original_vertices[2];
+                v0.cross(v1).normalize()
+            }),
+            original_centre: original_vertices.into_iter().sum::<Vec3D>() / len as f64,
             fill_char,
         }
-    }
-
-    pub fn projected_vertices(&self) -> Vec<Vec2D> {
-        self.vertices.iter().map(|v| v.projected).collect()
-    }
-
-    /// Get the "centre" of the face in 3D space, calculated based on the average of the original vertices
-    pub fn get_average_centre(&self) -> Vec3D {
-        self.vertices.iter().map(|v| v.original).sum::<Vec3D>() / self.vertices.len() as f64
-    }
-
-    /// Get the normal of the face
-    pub fn get_normal(&self) -> Option<Vec3D> {
-        if self.vertices.len() < 3 {
-            return None;
-        }
-        let v0 = self.vertices[0].original - self.vertices[2].original;
-        let v1 = self.vertices[1].original - self.vertices[2].original;
-        Some(v0.cross(v1).normalize())
     }
 }
