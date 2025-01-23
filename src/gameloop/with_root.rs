@@ -7,8 +7,8 @@ pub trait MainLoopRoot {
     /// This type will be passed from [`MainLoopRoot::sleep_and_get_input_data()`] to [`MainLoopRoot::frame()`]
     type InputDataType;
 
-    /// The FPS at which the main loop should run.
-    const FPS: f32;
+    /// Return the FPS at which the main loop should run. A constant like `60.0` or `30.0` is sufficient
+    fn get_fps(&self) -> f32;
 
     /// This is where the main logic of your game should go - handling input, moving objects, handling collisions, etc.
     fn frame(&mut self, input_data: Option<Self::InputDataType>);
@@ -44,7 +44,7 @@ pub trait MainLoopRoot {
     /// ```
     fn render_frame(&mut self);
 
-    /// The function used to sleep for the appropriate amount based on the FPS. Uses [`gameloop::sleep_fps`](super::sleep_fps()) by default and will return None for the `InputDataType`. The returned bool value should represent whether or not to skip rendering on the next frame
+    /// The function used to sleep for the appropriate amount based on the value returned by `get_fps`. Uses [`gameloop::sleep_fps`](super::sleep_fps()) by default and will return None for the `InputDataType`. The returned bool value should represent whether or not to skip rendering on the next frame
     fn sleep_and_get_input_data(
         &self,
         fps: f32,
@@ -62,7 +62,7 @@ pub trait MainLoopRoot {
     /// # }
     /// impl MainLoopRoot for Game {
     ///     type InputDataType = ();
-    ///     const FPS: f32 = 30.0;
+    ///     fn get_fps(&self) -> f32 { 30.0 }
     ///     fn frame(&mut self, input_data: Option<Self::InputDataType>) {
     ///         // --snip--
     ///     }
@@ -78,7 +78,7 @@ pub trait MainLoopRoot {
         let mut elapsed = Duration::ZERO;
 
         loop {
-            let (frame_skip, input_data) = self.sleep_and_get_input_data(Self::FPS, elapsed);
+            let (frame_skip, input_data) = self.sleep_and_get_input_data(self.get_fps(), elapsed);
             let now = Instant::now();
 
             self.frame(input_data);

@@ -23,7 +23,9 @@ impl Game {
 
 impl MainLoopRoot for Game {
     type InputDataType = (); // dummy type, since it isn't used in this project
-    const FPS: f32 = 30.0;
+    fn get_fps(&self) -> f32 {
+        30.0
+    }
 
     fn frame(&mut self, _input_data: Option<Self::InputDataType>) {
         self.pixel.pos.x += 1;
