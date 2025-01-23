@@ -11,7 +11,7 @@ pub fn get_terminal_size_as_vec2d() -> Option<Vec2D> {
     Some(Vec2D::new(i64::from(width.0), i64::from(height.0)))
 }
 
-/// Block the process until the console window is resized to
+/// Blocks the process until the console window is resized to fit `view_size`
 pub fn block_until_resized(view_size: Vec2D) {
     if let Some(term_size) = get_terminal_size_as_vec2d() {
         if term_size.cmplt(view_size).any() {
@@ -26,7 +26,7 @@ pub fn block_until_resized(view_size: Vec2D) {
     }
 }
 
-/// Prepare the console by printing lines to move previous console lines out of the way. Can only be called once in a program run
+/// Prepares the console by printing lines to move previous console lines out of the way. This is only done the first time this function is called, after which it does nothing
 ///
 /// Returns an error if [`terminal_size`] returns `None`, or if it fails to write to the formatter
 pub fn prepare_terminal(f: &mut fmt::Formatter<'_>) -> Result<(), String> {
