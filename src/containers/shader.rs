@@ -12,7 +12,7 @@ impl PixelContainer {
     pub fn shade_with(mut self, shader: &mut Box<dyn CanShade>) -> Self {
         self.pixels
             .iter_mut()
-            .foreach(|p| *p = shader.shade(*p));
+            .for_each(|p| *p = shader.shade(*p));
         self
     }
 }
