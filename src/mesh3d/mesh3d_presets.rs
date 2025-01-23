@@ -1,12 +1,8 @@
 //! This file contains the presets available when spawning a [`Mesh3D`]
 
-use std::f64::consts::PI;
-use crate::{
-    core::{ColChar, Modifier},
-    view3d::Face,
-};
+use crate::core::{ColChar, Modifier};
 
-use super::{Mesh3D, Vec3D, Transform3D};
+use super::{Face, Mesh3D, Transform3D, Vec3D};
 
 impl Mesh3D {
     /// The `gemini_engine` equivalent of Blender's default cube. Has sides of length 2

@@ -122,14 +122,13 @@ use crate::{
 use glam::DVec2;
 
 mod display_mode;
-mod render_helpers;
+mod projected_face;
 
 pub use display_mode::{
     lighting::{Light, LightType, BRIGHTNESS_CHARS},
     DisplayMode,
 };
-pub use render_helpers::Face;
-use render_helpers::{ProjectedFace, ProjectedVertex};
+use projected_face::{ProjectedFace, ProjectedVertex};
 
 /// The `Viewport` handles printing 3D objects to a 2D [`View`](crate::elements::View), and also acts as the scene's camera.
 pub struct Viewport {
@@ -193,11 +192,9 @@ impl Viewport {
 
             for face in &object.faces {
                 let face_vertices = face.index_into(&vertices);
-                let face_screen_points: Vec<Vec2D> =
-                    face_vertices.iter().map(|v| v.displayed).collect();
 
                 // Backface culling
-                if !render_helpers::is_clockwise(&face_screen_points) && backface_culling {
+                if backface_culling && !projected_face::is_clockwise(&face_vertices) {
                     continue;
                 }
 
@@ -209,22 +206,8 @@ impl Viewport {
                     continue;
                 }
 
-                let mean_z = if sort_faces {
-                    Some(
-                        face_vertices
-                            .iter()
-                            .map(ProjectedVertex::z_index)
-                            .sum::<f64>()
-                            / face_vertices.len() as f64,
-                    )
-                } else {
-                    None
-                };
-
                 screen_faces.push(ProjectedFace::new(
-                    face_screen_points,
-                    face_vertices.iter().map(|v| v.original).collect(),
-                    mean_z,
+                    face_vertices,
                     face.fill_char,
                 ));
             }
@@ -232,7 +215,7 @@ impl Viewport {
 
         if sort_faces {
             screen_faces
-                .sort_by_key(|face| (face.z_index.unwrap_or(0.0) * -1000.0).round() as isize);
+                .sort_by_key(|face| (face.get_average_centre().length() * -1000.0).round() as isize);
         }
 
         screen_faces
@@ -246,21 +229,20 @@ impl CanDraw for Viewport {
                 let screen_faces = self.project_faces(false, *backface_culling);
 
                 for face in screen_faces {
-                    for fi in 0..face.screen_points.len() {
+                    for fi in 0..face.vertices.len() {
                         let (i0, i1) = (
-                            face.screen_points[fi],
-                            face.screen_points[(fi + 1) % face.screen_points.len()],
+                            face.vertices[fi].projected,
+                            face.vertices[(fi + 1) % face.vertices.len()].projected,
                         );
                         Line::new(i0, i1, face.fill_char).draw_to(canvas);
                     }
                 }
-                panic!();
             }
             DisplayMode::Solid => {
                 let screen_faces = self.project_faces(true, true);
 
                 for face in screen_faces {
-                    Polygon::new(&face.screen_points, face.fill_char).draw_to(canvas);
+                    Polygon::new(&face.projected_vertices(), face.fill_char).draw_to(canvas);
                 }
             }
             DisplayMode::Illuminated { lights } => {
@@ -288,7 +270,7 @@ impl CanDraw for Viewport {
                         face.fill_char
                     };
 
-                    Polygon::new(&face.screen_points, fill_char).draw_to(canvas);
+                    Polygon::new(&face.projected_vertices(), fill_char).draw_to(canvas);
                 }
             }
         }
