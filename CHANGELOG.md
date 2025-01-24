@@ -82,7 +82,7 @@ I came back to `gemini-engine` with the intent to restructure it from the ground
 
 - Replaced `termsize` with `terminal_size`, as `termsize` was broken
 - Implemented defaults for containers
-- Nicer erros and docs
+- Nicer errors and docs
 
 [unreleased]: https://github.com/renpenguin/gemini-engine/compare/v1.0.1...HEAD
 [1.0.1]: https://github.com/renpenguin/gemini-engine/compare/v1.0.0...v1.0.1
