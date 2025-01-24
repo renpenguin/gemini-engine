@@ -10,7 +10,7 @@ Looking for input? The [console-input](https://crates.io/crates/console-input) c
 - [Quick Start](https://docs.rs/gemini-engine/latest/gemini_engine/core/index.html)
 - [Crates.io](https://crates.io/crates/gemini-engine)
 - [Documentation](https://docs.rs/gemini-engine)
-- [Changelog](https://github.com/renpenguin/gemini-engine/commits)
+- [Changelog](https://github.com/renpenguin/gemini-engine/blob/master/CHANGELOG.md)
 
 As of now this is still a work in progress, so any feedback or issue requests would be very much appreciated :)
 
