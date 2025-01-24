@@ -10,9 +10,11 @@
 pub mod ascii;
 pub mod containers;
 pub mod core;
-pub mod gameloop;
 pub mod primitives;
 pub mod view;
+
+#[cfg(feature = "gameloop")]
+pub mod gameloop;
 
 #[cfg(feature = "3D")]
 pub mod mesh3d;

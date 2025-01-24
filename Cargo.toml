@@ -14,8 +14,9 @@ keywords = ["gemini", "command-line", "ascii", "game-engine", "rendering-engine"
 categories = ["rendering", "rendering::engine", "graphics", "game-development", "command-line-interface"]
 
 [features]
-default = ["3D"]
+default = ["3D", "gameloop"]
 3D = []
+gameloop = []
 
 [dependencies]
 terminal_size = "0.4.1"
