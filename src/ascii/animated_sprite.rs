@@ -42,13 +42,15 @@ impl AnimatedSprite {
     /// Sets the current frame
     pub fn set_current_frame(&mut self, value: usize) {
         self.current_frame = value;
-        self.current_frame &= self.frames.len();
+        self.current_frame = self.current_frame.rem_euclid(self.frames.len());
     }
 
     /// Go to the next frame of the `AnimatedSprite`'s frames. Will automatically wrap around at the end of the list
     pub fn next_frame(&mut self) {
         self.current_frame += 1;
-        self.current_frame %= self.frames.len();
+        if self.current_frame >= self.frames.len() {
+            self.current_frame = 0;
+        }
     }
 }
 
