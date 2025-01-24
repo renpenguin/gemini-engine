@@ -1,4 +1,4 @@
-use crate::core::{CanDraw, ColChar, Vec2D};
+use crate::{containers::CanCollide, core::{CanDraw, ColChar, Vec2D}};
 
 /// A rectangle primitive which implements [`CanDraw`], and so can be drawn to [Canvas](crate::core::Canvas)es
 pub struct Rect {
@@ -41,5 +41,11 @@ impl CanDraw for Rect {
                 canvas.plot(self.pos + Vec2D::new(x, y), self.fill_char);
             }
         }
+    }
+}
+
+impl CanCollide for Rect {
+    fn collides_with_pos(&self, pos: Vec2D) -> bool {
+        pos.cmpge(self.pos).all() && pos.cmple(self.bottom_right()).all()
     }
 }

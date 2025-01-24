@@ -1,4 +1,4 @@
-use crate::core::{CanDraw, ColChar, Vec2D};
+use crate::{containers::CanCollide, core::{CanDraw, ColChar, Vec2D}};
 
 /// A singular point with a [`Vec2D`] position and [`ColChar`]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -20,5 +20,11 @@ impl Pixel {
 impl CanDraw for Pixel {
     fn draw_to(&self, canvas: &mut impl crate::core::Canvas) {
         canvas.plot(self.pos, self.fill_char);
+    }
+}
+
+impl CanCollide for Pixel {
+    fn collides_with_pos(&self, pos: Vec2D) -> bool {
+        self.pos == pos
     }
 }
