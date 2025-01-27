@@ -22,14 +22,14 @@ impl Game {
 }
 
 impl MainLoopRoot for Game {
-    type InputDataType = (); // dummy type, since it isn't used in this project
     fn get_fps(&self) -> f32 {
         30.0
     }
 
-    fn frame(&mut self, _input_data: Option<Self::InputDataType>) {
+    fn frame(&mut self) {
         self.pixel.pos.x += 1;
     }
+    
     fn render_frame(&mut self) {
         self.view.clear();
         self.view.draw(&self.pixel);
