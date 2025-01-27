@@ -50,7 +50,7 @@ pub trait MainLoopRoot {
         super::sleep_fps(fps, Some(elapsed))
     }
 
-    /// The main loop function of the main loop root. This shouldnt be overriden. The `fps` parameter will be passed straight to [`sleep_and_get_input()`](MainLoopRoot::sleep_and_get_input_data()). See the [`MainLoopRoot`] documentation for more info
+    /// The main loop function of the main loop root. This shouldn't be overriden. See the [`MainLoopRoot`] documentation for more info
     /// ```no_run
     /// # use gemini_engine::gameloop::MainLoopRoot;
     /// # struct Game {}

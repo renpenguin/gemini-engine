@@ -1,4 +1,4 @@
-//! Gemini includes some tools to make managing your core gameloop easier. If you read the Quick Start guide, you'll have seen that the example there didnt have a fully written gameloop. When you begin building larger projects with Gemini, this is what your code might look like:
+//! Gemini includes some tools to make managing your core gameloop easier. If you read the Quick Start guide, you'll have seen that the example there didn't have a fully written gameloop. When you begin building larger projects with Gemini, this is what your code might look like:
 //! ```no_run
 //! use gemini_engine::gameloop;
 //! use std::time::Instant;

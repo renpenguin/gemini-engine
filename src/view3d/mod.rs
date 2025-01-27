@@ -10,7 +10,7 @@
 //! ### Initialisation
 //! ```no_run
 //! # use gemini_engine::{core::{ColChar, Vec2D}, view::View};
-//! # use gemini_engine::{view3d::Viewport, mesh3d::{Mesh3D, Transform3D}};
+//! # use gemini_engine::{view3d::{Viewport, Light, DisplayMode}, mesh3d::{Mesh3D, Transform3D, Vec3D}};
 //! # const FOV: f64 = 95.0;
 //! let mut view = View::new(100, 50, ColChar::EMPTY);
 //!

@@ -77,7 +77,7 @@ impl Mesh3D {
         Self::new(vertices, faces)
     }
 
-    /// A gimbal to help you orient in `gemini_engine`'s 3D space. The orientation is as follows (from the default [`Viewport`](super::super::Viewport))
+    /// A gimbal to help you orient in `gemini_engine`'s 3D space. The orientation is as follows (from the default [`Viewport`](crate::view3d::Viewport))
     /// - X (red) increases as you move to the right
     /// - Y (green) increases as you move up
     /// - Z (blue) increases as you move away from the viewport

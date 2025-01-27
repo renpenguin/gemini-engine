@@ -36,7 +36,7 @@ pub fn prepare_terminal(f: &mut fmt::Formatter<'_>) -> Result<(), String> {
         TERMINAL_PREPARED.get_or_init(|| true);
 
         let Some((_, height)) = terminal_size() else {
-            return Err(String::from("Couldnt get terminal size"));
+            return Err(String::from("Couldn't get terminal size"));
         };
 
         write!(f, "{}", "\n".repeat(height.0 as usize)).map_err(|e| e.to_string())?;

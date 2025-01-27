@@ -42,7 +42,7 @@ fn main() {
     fps_gameloop!(
         {
             pixel.pos.x += 2;
-            // loop the position back to the other side. This can be done with `Wrapping::Wrap` but it won't change the element's actual position, so the pixel position being printed would continue to increase without looping
+            // loop the position back to the other side. This can be done with `WrappingMode::Wrap` but it won't change the element's actual position, so the pixel position being printed would continue to increase without looping
             pixel.pos %= view.size();
 
             line.pos1.y += line1_direction;
