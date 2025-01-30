@@ -1,4 +1,4 @@
-use crate::core::{ColChar, CanDraw, Vec2D};
+use crate::core::{CanDraw, ColChar, Vec2D};
 
 /// A line primitive which implements [`CanDraw`], and so can be drawn to [Canvas](crate::core::Canvas)es
 pub struct Line {

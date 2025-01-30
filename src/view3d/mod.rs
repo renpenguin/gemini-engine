@@ -222,11 +222,8 @@ impl CanDraw for Viewport {
                         .clamp(0, brightness_chars.len() - 1);
                     let intensity_char = brightness_chars[brightness_char_index];
 
-                    Polygon::new(
-                        &face.vertices,
-                        face.fill_char.with_char(intensity_char),
-                    )
-                    .draw_to(canvas);
+                    Polygon::new(&face.vertices, face.fill_char.with_char(intensity_char))
+                        .draw_to(canvas);
                 }
             }
         }

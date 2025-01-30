@@ -29,7 +29,7 @@ impl MainLoopRoot for Game {
     fn frame(&mut self) {
         self.pixel.pos.x += 1;
     }
-    
+
     fn render_frame(&mut self) {
         self.view.clear();
         self.view.draw(&self.pixel);

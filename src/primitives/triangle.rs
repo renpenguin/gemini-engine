@@ -1,4 +1,4 @@
-use crate::core::{ColChar, Vec2D, CanDraw};
+use crate::core::{CanDraw, ColChar, Vec2D};
 
 use super::Line;
 

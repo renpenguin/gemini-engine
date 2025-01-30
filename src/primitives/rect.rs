@@ -1,4 +1,7 @@
-use crate::{containers::CanCollide, core::{CanDraw, ColChar, Vec2D}};
+use crate::{
+    containers::CanCollide,
+    core::{CanDraw, ColChar, Vec2D},
+};
 
 /// A rectangle primitive which implements [`CanDraw`], and so can be drawn to [Canvas](crate::core::Canvas)es
 pub struct Rect {

@@ -1,8 +1,9 @@
 //! This module contains the [`Mesh3D`], which stores 3D objects as vertices and index faces
 
-mod mesh3d_presets;
 mod components;
-pub use components::{Vec3D, Transform3D, Face};
+mod mesh3d_presets;
+
+pub use components::{Face, Transform3D, Vec3D};
 
 /// A 3D mesh made up of vertices, faces made of indices into `vertices`, and a transformation.
 #[derive(Debug, Clone)]

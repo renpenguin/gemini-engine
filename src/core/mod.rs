@@ -32,12 +32,12 @@ pub type Vec2D = glam::I64Vec2;
 ///
 /// The only structs that implement this in `gemini` are [`View`](crate::view::View) and [`ScaleFitView`](crate::view::ScaleFitView).
 pub trait Canvas: Sized {
-	/// Plot a [`ColChar`] to the `Canvas` at `pos`
-	fn plot(&mut self, pos: Vec2D, c: ColChar);
+    /// Plot a [`ColChar`] to the `Canvas` at `pos`
+    fn plot(&mut self, pos: Vec2D, c: ColChar);
 }
 
 /// A struct that can draw to a [`Canvas`]
 pub trait CanDraw {
-	/// Draw the element to a struct that implements [`CanDraw`]
-	fn draw_to(&self, canvas: &mut impl Canvas);
+    /// Draw the element to a struct that implements [`CanDraw`]
+    fn draw_to(&self, canvas: &mut impl Canvas);
 }

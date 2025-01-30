@@ -17,7 +17,7 @@ pub fn block_until_resized(view_size: Vec2D) {
         if term_size.cmplt(view_size).any() {
             println!("Please resize your console window to fit the render\r");
             loop {
-				let term_size = get_terminal_size_as_vec2d().unwrap_or_else(|| unreachable!());
+                let term_size = get_terminal_size_as_vec2d().unwrap_or_else(|| unreachable!());
                 if term_size.cmpge(view_size).all() {
                     break;
                 }

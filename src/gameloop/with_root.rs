@@ -42,11 +42,7 @@ pub trait MainLoopRoot {
     fn render_frame(&mut self);
 
     /// The function used to sleep for the appropriate amount based on the value returned by `get_fps`. Uses [`gameloop::sleep_fps`](super::sleep_fps()) by default and will return None for the `InputDataType`. If the return value is `true`, `render_frame` will not be called on the next frame
-    fn sleep_and_get_input_data(
-        &self,
-        fps: f32,
-        elapsed: Duration,
-    ) -> bool {
+    fn sleep_and_get_input_data(&self, fps: f32, elapsed: Duration) -> bool {
         super::sleep_fps(fps, Some(elapsed))
     }
 

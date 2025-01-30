@@ -1,4 +1,7 @@
-use crate::{containers::CanCollide, core::{CanDraw, ColChar, Vec2D}};
+use crate::{
+    containers::CanCollide,
+    core::{CanDraw, ColChar, Vec2D},
+};
 
 /// A singular point with a [`Vec2D`] position and [`ColChar`]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

@@ -10,4 +10,4 @@ mod shader;
 pub use shader::CanShade;
 
 mod collision_container;
-pub use collision_container::{CollisionContainer, CanCollide};
+pub use collision_container::{CanCollide, CollisionContainer};
