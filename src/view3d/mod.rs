@@ -149,7 +149,9 @@ impl Viewport {
         for object in &self.objects {
             let vertices = self.get_vertices_on_screen(object);
             for face in &object.faces {
-                let face_vertices = face.index_into(&vertices);
+                let face_vertices = face
+                    .index_into(&vertices)
+                    .expect("Failed to index mesh vertices with face indices");
 
                 for v in &face_vertices {
                     if v.original.z <= self.clipping_distace {
