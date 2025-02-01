@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Breaking changes
 
-- Removed input handling from `GameLoopRoot`. Input handling should be done entirely within the `input` method
+- Removed input handling from `MainLoopRoot`. Input handling should be done entirely within the `input` method
 
 ## [1.0.1] - 2025-01-24
 
@@ -45,8 +45,8 @@ I came back to `gemini-engine` with the intent to restructure it from the ground
 		`core` contains the main traits (`CanDraw` and `Canvas`) and their relevant types `Vec2D`, `ColChar`, `Modifier` and `Colour`
 	- `elements3d` has been split into `mesh3d` (where `Mesh3D`, `Transform3D`, `Vec3D` and `Face` now live) 
 		and `view3d` (for `Viewport`, `DisplayMode` and related types)
-	- `gameloop` remains much the same, but `with_root` has been flattened into `gameloop` so that `GameLoopRoot` is now accessible directly from the `gameloop` module
-		- The FPS at which a `GameLoopRoot` runs is now determined by 
+	- `gameloop` remains much the same, but `with_root` has been flattened into `gameloop` so that `MainLoopRoot` is now accessible directly from the `gameloop` module
+		- The FPS at which a `MainLoopRoot` runs is now determined by 
 
 - Replaced vectors and transforms with `glam` primitives:
 	- `Vec2D` is now an alias to `glam::I64Vec2`, replacing most instances of `isize` with `i64`
