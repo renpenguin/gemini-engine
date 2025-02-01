@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Nicer error message when face index is out of bounds on passed slice in `Face::index_into`
+- Don't sleep before calling the first `frame` and `render_frame` in `MainLoopRoot::main_loop`
 
 ## [1.1.0] - 2025-01-27
 

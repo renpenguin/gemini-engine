@@ -67,10 +67,10 @@ pub trait MainLoopRoot {
     /// game.main_loop();
     /// ```
     fn main_loop(&mut self) {
-        let mut elapsed = Duration::ZERO;
+        let mut elapsed;
+        let mut frame_skip = false;
 
         loop {
-            let frame_skip = self.sleep_and_get_input_data(self.get_fps(), elapsed);
             let now = Instant::now();
 
             self.frame();
@@ -80,6 +80,7 @@ pub trait MainLoopRoot {
             }
 
             elapsed = now.elapsed();
+            frame_skip = self.sleep_and_get_input_data(self.get_fps(), elapsed);
         }
     }
 }
