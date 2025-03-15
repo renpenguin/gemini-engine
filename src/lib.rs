@@ -14,7 +14,9 @@ pub mod primitives;
 pub mod view;
 
 #[cfg(feature = "gameloop")]
-pub mod gameloop;
+pub use gemini_mainloop as gameloop;
+#[cfg(feature = "gameloop")]
+pub use gemini_mainloop::fps_gameloop;
 
 #[cfg(feature = "3D")]
 pub mod mesh3d;

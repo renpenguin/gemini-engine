@@ -1,7 +1,7 @@
 [package]
 name = "gemini-engine"
 authors = ["RedPenguin"]
-edition = "2021"
+edition = "2024"
 # when publishing, commit as "published <new version> to crates.io"
 version = "1.1.1"
 description = "A 2D/3D monospaced ASCII rendering engine for the terminal"
@@ -16,11 +16,12 @@ categories = ["rendering", "rendering::engine", "graphics", "game-development", 
 [features]
 default = ["3D", "gameloop"]
 3D = []
-gameloop = []
+gameloop = ["dep:gemini-mainloop"]
 
 [dependencies]
 terminal_size = "0.4.1"
 glam = "0.28.0"
+gemini-mainloop = { version = "0.2.0", optional = true }
 
 [lints.rust]
 missing_docs = "warn"

@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Implemented a much faster way to draw at double width! 
+- Implemented a much faster way to draw at double width!
+- Moved the gameloop module to its own crate: [gemini-mainloop](https://crates.io/crates/gemini-mainloop). This has no effective change
+
+### Breaking changes
+
+- `MainLoopRoot`'s (now in `gemini-mainloop`) `sleep_and_get_input_data` method has been renamed to just `sleep`
 
 ## [1.1.1] - 2025-02-01
 
