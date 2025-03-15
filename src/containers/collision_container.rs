@@ -12,18 +12,18 @@ pub trait CanCollide {
 
 /// Container for references to collider objects
 #[derive(Clone)]
-pub struct CollisionContainer<'a> {
+pub struct CollisionContainer<'e> {
     /// The elements used to define the collision hitbox. This can be anything that implements [`CanCollide`]
-    pub elements: Vec<&'a dyn CanCollide>,
+    pub elements: Vec<&'e dyn CanCollide>,
 }
 
-impl<'a> Default for CollisionContainer<'a> {
+impl Default for CollisionContainer<'_> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<'a> CollisionContainer<'a> {
+impl<'e> CollisionContainer<'e> {
     /// Create a new `CollisionContainer`
     #[must_use]
     pub const fn new() -> Self {
@@ -31,7 +31,7 @@ impl<'a> CollisionContainer<'a> {
     }
 
     /// Add an element to the container
-    pub fn push(&mut self, element: &'a impl CanCollide) {
+    pub fn push(&mut self, element: &'e impl CanCollide) {
         self.elements.push(element);
     }
 
@@ -49,15 +49,15 @@ impl<'a> CollisionContainer<'a> {
     }
 }
 
-impl<'a> CanCollide for CollisionContainer<'a> {
+impl CanCollide for CollisionContainer<'_> {
     /// Returns true if one of the elements in the `CollisionContainer` intersects the passed position
     fn collides_with_pos(&self, pos: Vec2D) -> bool {
         self.elements.iter().any(|e| e.collides_with_pos(pos))
     }
 }
 
-impl<'a> From<&'a dyn CanCollide> for CollisionContainer<'a> {
-    fn from(element: &'a dyn CanCollide) -> Self {
+impl<'e> From<&'e dyn CanCollide> for CollisionContainer<'e> {
+    fn from(element: &'e dyn CanCollide) -> Self {
         Self {
             elements: vec![element],
         }
