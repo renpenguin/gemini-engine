@@ -1,8 +1,5 @@
 //! This module is home to the [`View`] struct, a [`Canvas`] that is able to draw to `stdout`.
-use crate::{
-    containers::PixelContainer,
-    core::{CanDraw, Canvas, ColChar, Vec2D},
-};
+use crate::core::{CanDraw, Canvas, ColChar, Vec2D};
 use std::{
     fmt::{self, Display, Formatter},
     io::{self, Write},
@@ -116,12 +113,17 @@ impl View {
 
     /// Draw a struct implementing [`CanDraw`] to the `View` with a doubled width. Drawing a `Pixel` at `Vec2D(5,3)`, for example, will result in pixels at at `Vec2D(10,3)` and `Vec2D(11,3)` being plotted to. Useful when you want to work with more square pixels, as single text characters are much taller than they are wide
     pub fn draw_double_width(&mut self, element: &impl CanDraw) {
-        for mut pixel in PixelContainer::from(element).pixels {
-            pixel.pos.x *= 2;
-            self.draw(&pixel);
-            pixel.pos.x += 1;
-            self.draw(&pixel);
+        struct DoubleWidthView<'v>(&'v mut View);
+        impl Canvas for DoubleWidthView<'_> {
+            fn plot(&mut self, pos: Vec2D, c: ColChar) {
+                let pos = pos * Vec2D::new(2, 1);
+                self.0.plot(pos, c);
+                self.0.plot(pos + Vec2D::new(1, 0), c);
+            }
         }
+
+        // Wrap the `View` in a custom struct (defined above), replacing the plot function with one that plots at double width, and pass it to the element as usual. This should be much faster and more memory efficient than storing all of the element's draw calls in a `PixelContainer` before double-width plotting each of them.
+        element.draw_to(&mut DoubleWidthView(self));
     }
 
     /// Display the `View`. `View` implements the `Display` trait and so can be rendered in many ways (such as `println!("{view}");`), but this is intended to be the fastest way possible.
