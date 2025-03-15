@@ -166,7 +166,7 @@ impl Display for View {
             for x in 0..row.len() {
                 row[x].display_with_prev_and_next(
                     f,
-                    row.get(x - 1).map(|c| c.modifier),
+                    row.get(x.wrapping_sub(1)).map(|c| c.modifier),
                     row.get(x + 1).map(|c| c.modifier),
                 )?;
             }

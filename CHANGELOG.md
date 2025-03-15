@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `MainLoopRoot`'s (now in `gemini-mainloop`) `sleep_and_get_input_data` method has been renamed to just `sleep`
 
+### Fixed
+
+- Integer underflow error when trying to call `View::display_render` in a binary built on debug
+
 ## [1.1.1] - 2025-02-01
 
 ### Changed
