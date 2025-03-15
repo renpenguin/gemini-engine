@@ -111,7 +111,9 @@ impl FromStr for Colour {
         let parts: Vec<&str> = s.split(',').collect();
 
         if parts.len() != 3 {
-            return Err(String::from("Incorrect number of arguments, string must be in format r,g,b to be parsed correctly"));
+            return Err(String::from(
+                "Incorrect number of arguments, string must be in format r,g,b to be parsed correctly",
+            ));
         }
         println!("{parts:?}");
 

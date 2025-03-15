@@ -35,12 +35,12 @@ impl<'e> CollisionContainer<'e> {
         self.elements.push(element);
     }
 
-    /// Returns true if the given [`CanCollide`] is overlapping the `CollisionContainer`
+    /// Returns true if the given element implementing [`CanDraw`] is overlapping the `CollisionContainer`
     pub fn overlaps_element(&self, element: &impl CanDraw) -> bool {
         self.will_overlap_element(element, Vec2D::ZERO)
     }
 
-    /// Returns true if the element will be overlapping the `CollisionContainer` when the offset is applied
+    /// Returns true if the given element implementing [`CanDraw`] will be overlapping the `CollisionContainer` when moved by `offset`
     pub fn will_overlap_element(&self, element: &impl CanDraw, offset: Vec2D) -> bool {
         PixelContainer::from(element)
             .pixels
@@ -50,7 +50,7 @@ impl<'e> CollisionContainer<'e> {
 }
 
 impl CanCollide for CollisionContainer<'_> {
-    /// Returns true if one of the elements in the `CollisionContainer` intersects the passed position
+    /// Returns true if any of the elements in the `CollisionContainer` intersect the passed position
     fn collides_with_pos(&self, pos: Vec2D) -> bool {
         self.elements.iter().any(|e| e.collides_with_pos(pos))
     }

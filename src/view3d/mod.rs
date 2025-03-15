@@ -83,8 +83,8 @@ mod display_mode;
 mod projected_face;
 
 pub use display_mode::{
-    lighting::{Light, LightType, BRIGHTNESS_CHARS},
     DisplayMode,
+    lighting::{BRIGHTNESS_CHARS, Light, LightType},
 };
 use projected_face::{ProjectedFace, ProjectedVertex};
 

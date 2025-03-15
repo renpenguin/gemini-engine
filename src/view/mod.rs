@@ -12,7 +12,7 @@ mod wrapping;
 pub use scale_to_fit::ScaleFitView;
 pub use wrapping::WrappingMode;
 
-/// The View struct implements [`Canvas`], and can be used to draw to stdout. In normal use, you would clear the View, draw all your `CanDraws` implementing elements to it and then render to stdout with [`View::display_render`]. The following example demonstrates a piece of code that will render a View of width 9 and height 3, with a single Pixel in the middle
+/// The View struct implements [`Canvas`], and draws to stdout upon calling `display_render`.
 /// ```no_run
 /// use gemini_engine::{view::{WrappingMode, View}, core::{ColChar, Vec2D}, primitives::Pixel};
 ///
