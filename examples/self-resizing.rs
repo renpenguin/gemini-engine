@@ -4,7 +4,7 @@ use gemini_engine::{
     core::{ColChar, Modifier, Vec2D},
     view::ScaleFitView,
 };
-use std::{thread::sleep, time::Duration};
+use std::{thread, time::Duration};
 
 const TEXTURE: &str = "
 .-----.
@@ -32,6 +32,6 @@ fn main() {
         scale_view.view.draw(&sprite);
         let _ = scale_view.view.display_render();
 
-        sleep(Duration::from_millis(10));
+        thread::sleep(Duration::from_millis(10));
     }
 }

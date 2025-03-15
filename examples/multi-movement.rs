@@ -4,7 +4,6 @@ use std::{thread, time::Duration};
 
 use gemini_engine::{
     core::{ColChar, Vec2D},
-    fps_gameloop,
     primitives::Rect,
     view::{View, WrappingMode},
 };
@@ -15,36 +14,29 @@ const FILL_CHAR: ColChar = ColChar::SOLID;
 fn main() {
     let mut view = View::new(50, 12, ColChar::BACKGROUND).with_wrapping_mode(WrappingMode::Wrap);
 
-    let mut blocks = vec![
-        Rect::new(Vec2D::new(0, 0), BLOCK_SIZE, FILL_CHAR),
-        Rect::new(Vec2D::new(0, 2), BLOCK_SIZE, FILL_CHAR),
-        Rect::new(Vec2D::new(0, 4), BLOCK_SIZE, FILL_CHAR),
-        Rect::new(Vec2D::new(0, 6), BLOCK_SIZE, FILL_CHAR),
-        Rect::new(Vec2D::new(0, 8), BLOCK_SIZE, FILL_CHAR),
-        Rect::new(Vec2D::new(0, 10), BLOCK_SIZE, FILL_CHAR),
-    ];
+    let mut blocks: Vec<Rect> = (0..=5)
+        .map(|offset| Rect::new(Vec2D::new(0, offset * 2), BLOCK_SIZE, FILL_CHAR))
+        .collect();
 
     let mut i = 0;
-    fps_gameloop!(
-        {
-            i += 1;
-            for (j, block) in (0u32..).zip(blocks.iter_mut()) {
-                if i % 2_u32.pow(j) == 0 {
-                    block.pos.x += 1;
-                }
-            }
-        },
-        {
-            view.clear();
-            for block in &blocks {
-                view.draw(block);
-            }
-            let _ = view.display_render();
+    loop {
+        if blocks.iter().all(|b| b.pos.x % view.width as i64 == 0) {
+            thread::sleep(Duration::from_secs(2));
+        };
 
-            if blocks.iter().all(|b| b.pos.x % view.width as i64 == 0) {
-                thread::sleep(Duration::from_secs(2));
-            };
-        },
-        60.0
-    );
+        i += 1;
+        for (j, block) in (0u32..).zip(blocks.iter_mut()) {
+            if i % 2_u32.pow(j) == 0 {
+                block.pos.x += 1;
+            }
+        }
+
+        view.clear();
+        for block in &blocks {
+            view.draw(block);
+        }
+        let _ = view.display_render();
+
+        thread::sleep(Duration::from_secs_f32(1.0 / 60.0));
+    }
 }
