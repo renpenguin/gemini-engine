@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Added the `enable-ansi-support` crate when compiling for Windows to ensure that the terminal is set to register ASCII keycodes for cursor positioning and colours
+- Create `Vec` objects with pre-allocated capacity whenever possible
 
 ## [1.2.0] - 2025-03-15
 

@@ -29,7 +29,7 @@ impl Face {
     /// # Errors
     /// Will return an error if the passed slice is not long enough to be indexed by the face
     pub fn index_into<T: Copy>(&self, vertices: &[T]) -> Result<Vec<T>, String> {
-        let mut indexed_vertices = Vec::new();
+        let mut indexed_vertices = Vec::with_capacity(self.v_indices.len());
         for v_index in &self.v_indices {
             if let Some(vertex) = vertices.get(*v_index) {
                 indexed_vertices.push(*vertex);

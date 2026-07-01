@@ -32,8 +32,8 @@ fn is_ear(vertex: Vec2D, prev_vertex: Vec2D, next_vertex: Vec2D, polygon: &[Vec2
 /// Split a polygon up into triangles using the ear cutting algorithm. Returns a vec of coordinate sets for each triangle
 #[must_use]
 pub fn triangulate(vertices: &[Vec2D]) -> Vec<[Vec2D; 3]> {
-    let mut triangles = Vec::new();
     let n = vertices.len();
+    let mut triangles = Vec::with_capacity(n - 2);
 
     if n < 3 {
         return triangles;
