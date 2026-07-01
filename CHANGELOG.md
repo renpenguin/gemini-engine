@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Added the `enable-ansi-support` crate when compiling for Windows to ensure that the terminal is set to register ASCII keycodes for cursor positioning and colours
+
 ## [1.2.0] - 2025-03-15
 
 ### Changed
@@ -56,17 +62,17 @@ I came back to `gemini-engine` with the intent to restructure it from the ground
 ### Breaking changes
 
 - The entire library has been restructured:
-	- `elements` has been split into `core`, `view`, `ascii`, `primitives` and `containers`. 
+	- `elements` has been split into `core`, `view`, `ascii`, `primitives` and `containers`.
 		`core` contains the main traits (`CanDraw` and `Canvas`) and their relevant types `Vec2D`, `ColChar`, `Modifier` and `Colour`
-	- `elements3d` has been split into `mesh3d` (where `Mesh3D`, `Transform3D`, `Vec3D` and `Face` now live) 
+	- `elements3d` has been split into `mesh3d` (where `Mesh3D`, `Transform3D`, `Vec3D` and `Face` now live)
 		and `view3d` (for `Viewport`, `DisplayMode` and related types)
 	- `gameloop` remains much the same, but `with_root` has been flattened into `gameloop` so that `MainLoopRoot` is now accessible directly from the `gameloop` module
-		- The FPS at which a `MainLoopRoot` runs is now determined by 
+		- The FPS at which a `MainLoopRoot` runs is now determined by
 
 - Replaced vectors and transforms with `glam` primitives:
 	- `Vec2D` is now an alias to `glam::I64Vec2`, replacing most instances of `isize` with `i64`
 	- `Vec3D` is now an alias to `glam::DVec3`
-	- `Transform3D` has been replaced with an alias to `glam::DMat4`. 
+	- `Transform3D` has been replaced with an alias to `glam::DMat4`.
 		This completely changes how transformation of 3D objects is done. See examples for common uses
 	- Certain methods are now named differently.
 		For example, the vectors' `cross` method is now called `perp_dot`
@@ -79,11 +85,11 @@ I came back to `gemini-engine` with the intent to restructure it from the ground
 		objects can be drawn to the container, and the container can in turn draw to any other `Canvas`
 
 - `Viewport` has been restructured with the above changes in mind:
-	- `Viewport::render` has been removed. It has been replaced with an implementation of `CanDraw` which draws faces directly to a passed_screen. 
+	- `Viewport::render` has been removed. It has been replaced with an implementation of `CanDraw` which draws faces directly to a passed_screen.
 	- The list of models and `display_mode` are now fields of the struct, to be set in advance
 
 - All instances of the keyword `blit` and often `print` have been replaced with `draw`
-- `Rect::new_from_to` offsets size by `Vec2D::ONE` to match the visual appearance of a Rect 
+- `Rect::new_from_to` offsets size by `Vec2D::ONE` to match the visual appearance of a Rect
 	(previously, using `new_from_to` with the same position twice would give a `Rect` with size `(0,0)`)
 
 ### Added

@@ -26,7 +26,9 @@ pub fn block_until_resized(view_size: Vec2D) {
     }
 }
 
-/// Prepares the console by printing lines to move previous console lines out of the way. This is only done the first time this function is called, after which it does nothing
+/// Prepares the console. This is only done the first time this function is called, after which it does nothing. Operations
+/// - Prints blank lines to move previous console lines out of the way
+/// - If on Windows, Calls [`enable_ansi_support()`](https://crates.io/crates/enable-ansi-support) to enable Windows support
 ///
 /// Returns an error if [`terminal_size`] returns `None`, or if it fails to write to the formatter
 pub fn prepare_terminal(f: &mut fmt::Formatter<'_>) -> Result<(), String> {
@@ -40,6 +42,12 @@ pub fn prepare_terminal(f: &mut fmt::Formatter<'_>) -> Result<(), String> {
         };
 
         write!(f, "{}", "\n".repeat(height.0 as usize)).map_err(|e| e.to_string())?;
+
+        // If using Windows, call a function to enable full ANSI escape code support.
+        #[cfg(windows)]
+        if enable_ansi_support::enable_ansi_support().is_err() {
+            return Err(String::from("Failed to enable Windows ANSI support."));
+        }
     }
 
     Ok(())
